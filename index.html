@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>ABM de Alumnos - Gimnasio</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <h1>Gestión de Alumnos - Gimnasio</h1>
+
+    <form id="formulario">
+        <input type="text" id="nombre" placeholder="Nombre" required>
+        <input type="text" id="apellido" placeholder="Apellido" required>
+        <input type="number" id="dni" placeholder="DNI" required>
+        <input type="tel" id="telefono" placeholder="Teléfono" required>
+        <input type="tel" id="emergencia" placeholder="Tel. Emergencia" required>
+        <input type="date" id="vencimiento" required>
+        <select id="tipoCuota" required>
+            <option value="">Tipo de Cuota</option>
+            <option value="Pilates Camilla">Pilates Camilla</option>
+            <option value="Telas">Telas</option>
+            <option value="Clases Grupales">Clases Grupales</option>
+            <option value="Sala">Sala</option>
+            <option value="Mixta">Mixta</option>
+            <option value="Sala-Pilates">Sala-Pilates</option>
+            <option value="clases-Pilates">clases-Pilates</option>
+        </select>
+        <button type="submit">Guardar Alumno</button>
+    </form>
+
+    <input type="text" id="busqueda" placeholder="Buscar alumno...">
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th><th>Apellido</th><th>DNI</th><th>Teléfono</th><th>Emergencia</th>
+                <th>Vencimiento</th><th>Tipo Cuota</th><th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tablaAlumnos"></tbody>
+    </table>
+
+    <button onclick="exportarBackup()">Exportar Backup</button>
+    <input type="file" onchange="importarBackup(event)" accept=".json">
+
+    <script src="index.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Cliente</title>
+    <link rel="stylesheet" href="cliente.css">
+</head>
+<body>
+    <h2>INGRESO ALUMNOS</h2>
+
+    <form id="loginForm">
+        <input type="number" id="dni" placeholder="Ingrese su DNI" required>
+       
+    </form>
+
+    <div id="alertaDni">
+        ❌ DNI incorrecto.
+    </div>
+
+    <div id="clienteInfo">
+        <h1>Datos del Cliente</h1>
+        <p><strong>Nombre:</strong> <span id="nombre"></span></p>
+        <p><strong>Apellido:</strong> <span id="apellido"></span></p>
+        <p><strong>DNI:</strong> <span id="dniCliente"></span></p>
+        <p><strong>Vencimiento de cuota:</strong> <span id="vencimiento"></span></p>
+        <p><strong>Tipo de cuota:</strong> <span id="tipoCuota"></span></p>
+    </div>
+
+    <script src="cliente.js"></script>
+</body>
+</html>

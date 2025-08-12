@@ -1,0 +1,72 @@
+p {
+    font-size: 3.5rem;
+    margin: 0;
+}
+
+h1 {
+    display: none;
+}
+
+span {
+    text-transform: capitalize;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    text-align: center;
+    background-image: url(sources/ambitious-studio-rick-barrett-w7jYaN7GqyA-unsplash.jpg);
+    background-size: cover;
+}
+
+h2 {
+    font-size: 3rem;
+    margin-bottom: 0%;
+    color: beige;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+input {
+    padding: 8px;
+    margin: 5px;
+}
+
+button {
+    padding: 8px;
+    cursor: pointer;
+}
+
+
+h1 {
+    display: none;
+}
+
+span {
+    text-transform: capitalize;
+}
+
+#alertaDni {
+    display: none;
+    background-color: #ffdddd;
+    color: #a30000;
+    padding: 30px;
+    margin: 30px auto;
+    width: 60%;
+    border: 3px solid red;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 3rem;
+}
+
+#clienteInfo {
+    display: none;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 15px;
+    margin-left: 75px;
+    margin-right: 75px;
+    border: solid 3px whitesmoke;
+}
