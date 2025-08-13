@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body>
+    <header>
+      <h1 class="text-5xl text-center pt-2">Gestión de Alumnos - Gimnasio</h1>
+      <div class="flex justify-start mr-5 pt-12 text-3xl">
+        <a href="index.html" class="text-right text-blue-400">< Inicio</a>
+      </div>
+    </header>
+
+    <main
+      class="w-full max-w-7xl mx-auto px-4 py-8 flex justify-center items-center"
+    >
+      <input type="text" id="busqueda" placeholder="Buscar alumno..." />
+
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>DNI</th>
+            <th>Teléfono</th>
+            <th>Emergencia</th>
+            <th>Vencimiento</th>
+            <th>Tipo Cuota</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tablaAlumnos"></tbody>
+      </table>
+    </main>
+
+    <button onclick="exportarBackup()">Exportar Backup</button>
+    <input type="file" onchange="importarBackup(event)" accept=".json" />
+    <script src="index.js"></script>
+  </body>
+</html>
