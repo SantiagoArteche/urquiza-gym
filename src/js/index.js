@@ -1,4 +1,5 @@
-const formulario = document.getElementById("formulario");
+const localDbPath = "../db/localDb.json";
+const form = document.getElementById("formulario");
 const tabla = document.getElementById("tablaAlumnos");
 const busqueda = document.getElementById("busqueda");
 let alumnos = JSON.parse(localStorage.getItem("alumnos")) || [];
@@ -16,8 +17,15 @@ function fechaAOrdenable(fecha) {
   return f.replace(/-/g, "");
 }
 
-function guardarAlumno(e) {
+async function readDatabase() {
+  
+}
+async function saveClient(e) {
   e.preventDefault();
+
+
+  const database = await readDatabase();
+
   const alumno = {
     nombre: document.getElementById("nombre").value.trim(),
     apellido: document.getElementById("apellido").value.trim(),
@@ -31,20 +39,8 @@ function guardarAlumno(e) {
     ultimaModificacion: new Date().toISOString().split("T")[0],
   };
 
-  let alumnos = JSON.parse(localStorage.getItem("alumnos")) || [];
-  const index = alumnos.findIndex((a) => a.dni === alumno.dni);
-  if (index !== -1) {
-    alumnos[index] = {
-      ...alumno,
-      ultimaModificacion: new Date().toISOString().split("T")[0],
-    };
-  } else {
-    alumnos.push(alumno);
-  }
-
+  console.log(myFile);
   localStorage.setItem("alumnos", JSON.stringify(alumnos));
-  formulario.reset();
-  mostrarAlumnos();
 }
 
 function mostrarAlumnos(filtro = "") {
@@ -176,9 +172,10 @@ function importarBackup(event) {
   reader.readAsText(file);
 }
 
-if (formulario) {
-  formulario.addEventListener("submit", guardarAlumno);
+if (form) {
+  form.addEventListener("submit", saveClient);
 }
+
 if (busqueda) {
   busqueda.addEventListener("input", () => mostrarAlumnos(busqueda.value));
   mostrarAlumnos();
