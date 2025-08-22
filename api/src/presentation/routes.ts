@@ -6,6 +6,7 @@ export class Routes {
     const router = Router();
 
     router.use("/api/users", UserRoutes.router);
+
     return router;
   }
 }

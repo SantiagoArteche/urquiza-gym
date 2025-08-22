@@ -4,31 +4,72 @@ import path from "path";
 
 const dbPath = path.join(__dirname, "database.json");
 export class LocalRepository implements IRepository {
-  constructor() {}
-
   getAll(search?: string, limit?: number, offset?: number) {
     const fileContent = fs.readFileSync(dbPath, "utf8");
+
     return JSON.parse(fileContent);
   }
 
-  getById(id: number) {}
+  getById(id: number, entityKey?: string) {
+    if (!entityKey) return ["Missing key"];
 
-  deleteById(id: number) {}
+    const file = this.getAll();
 
-  createId(users: any) {
-    if (!users.length) return 1;
+    const entities = file[entityKey];
 
-    users.sort((a: any, b: any) => a.id - b.id);
+    if (!entities.length) return ["The searched property must be an array"];
 
-    return users.at(-1).id + 1;
+    const foundEntity = entities.find((entity: any) => entity.id === id);
+
+    if (!foundEntity) return ["User not found"];
+
+    return [null, foundEntity];
   }
 
-  create(data: any) {
-    const { users } = this.getAll();
-    const id = this.createId(users);
-    const newUser = { ...data, id };
-    fs.writeFileSync(dbPath, JSON.stringify({ users: [...users, newUser] }));
+  deleteById(id: number, entityKey?: string) {
+    if (!entityKey) return ["Missing key"];
 
-    return newUser;
+    const file = this.getAll();
+
+    const entities = file[entityKey];
+    if (!entities.length) return ["The searched property must be an array"];
+
+    const newEntities = entities.filter((entity: any) => entity.id !== id);
+
+    if (newEntities.length === entities.length) return ["User not found"];
+
+    file[entityKey] = newEntities;
+
+    fs.writeFileSync(dbPath, JSON.stringify(file));
+
+    return [null, true];
+  }
+
+  createId(entities: any[]) {
+    if (!entities.length) return 1;
+
+    entities.sort((a: any, b: any) => a.id - b.id);
+
+    const lastIndex = entities.length - 1;
+    return entities[lastIndex].id + 1;
+  }
+
+  create(data: any, entityKey?: string) {
+    if (!entityKey) return { error: "Missing key" };
+
+    const file = this.getAll();
+
+    const entities = file[entityKey];
+    if (!entities.length)
+      return { error: "The searched property must be an array" };
+
+    const id = this.createId(entities);
+
+    const newEntity = { ...data, id };
+    file[entityKey] = [...entities, newEntity];
+
+    fs.writeFileSync(dbPath, JSON.stringify(file));
+
+    return newEntity;
   }
 }

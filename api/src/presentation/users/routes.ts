@@ -12,6 +12,8 @@ export class UserRoutes {
     const controller = new UserController(service);
 
     router.get("/", controller.getUsers);
+    router.get("/:id", controller.getUserById);
+    router.delete("/:id", controller.deleteUser);
     router.post("/", controller.createUser);
 
     return router;
