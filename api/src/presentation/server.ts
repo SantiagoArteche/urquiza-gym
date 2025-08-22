@@ -1,4 +1,5 @@
 import express, { Router } from "express";
+import cors from "cors";
 
 export class Server {
   public app = express();
@@ -8,6 +9,7 @@ export class Server {
   start() {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(cors({ origin: "*" }));
 
     this.app.use(this.routes);
 

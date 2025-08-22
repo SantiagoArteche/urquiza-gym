@@ -23,11 +23,10 @@ export class UserController {
     return res.json(foundUser);
   };
 
-  createUser = (req: Request, res: Response) => {
+  createUser = async (req: Request, res: Response) => {
     const {
       name,
       lastName,
-      dni,
       phone,
       countryId,
       emergencyPhone,
@@ -38,7 +37,6 @@ export class UserController {
     const data = {
       name,
       lastName,
-      dni,
       phone,
       countryId,
       emergencyPhone,
@@ -46,9 +44,9 @@ export class UserController {
       debtType,
     };
 
-    const users = this.service.createUser(data);
+    const newUser = await this.service.createUser(data);
 
-    return res.json({ users });
+    return res.json(newUser);
   };
 
   deleteUser = (req: Request, res: Response) => {

@@ -32,6 +32,7 @@ export class LocalRepository implements IRepository {
     const file = this.getAll();
 
     const entities = file[entityKey];
+
     if (!entities.length) return ["The searched property must be an array"];
 
     const newEntities = entities.filter((entity: any) => entity.id !== id);
