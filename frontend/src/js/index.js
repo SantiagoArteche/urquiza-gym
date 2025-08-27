@@ -41,7 +41,6 @@ function showSuccessModal(clientData) {
     })
   );
 
-  // Populate modal with client data
   document.getElementById(
     "modalNombre"
   ).textContent = `${clientData.name} ${clientData.lastName}`;
@@ -52,10 +51,8 @@ function showSuccessModal(clientData) {
   hideForm();
   showOverlay();
 
-  // Show modal
   modal.classList.remove("hidden");
 
-  // Prevent body scroll when modal is open
   document.body.style.overflow = "hidden";
 }
 
@@ -68,7 +65,6 @@ function hideSuccessModal() {
 
   localStorage.removeItem("modalState");
 
-  // Restore body scroll
   document.body.style.overflow = "auto";
 }
 
@@ -79,14 +75,14 @@ function restoreModalState() {
       const { isVisible, clientData } = JSON.parse(savedState);
       if (isVisible && clientData) {
         showSuccessModal(clientData);
-        return true; // Return true if modal was restored
+        return true; 
       }
     } catch (error) {
       console.error("Error restoring modal state:", error);
       localStorage.removeItem("modalState");
     }
   }
-  return false; // Return false if no modal was restored
+  return false; 
 }
 
 async function getUsers() {
@@ -138,14 +134,11 @@ function showErrorAlert(message) {
   const alertaExito = document.getElementById("alertaExito");
   const alertaError = document.getElementById("alertaError");
 
-  // Hide success alert if visible
   alertaExito.classList.add("hidden");
 
-  // Update message and show error alert
   document.getElementById("errorMessage").textContent = message;
   alertaError.classList.remove("hidden");
 
-  // Smooth scroll to alert
   alertaError.scrollIntoView({ behavior: "smooth" });
 }
 
@@ -177,24 +170,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Close modal button
   const closeModalBtn = document.getElementById("closeModal");
   if (closeModalBtn) {
     closeModalBtn.addEventListener("click", hideSuccessModal);
   }
 
-  // Create another client button
   const createAnotherBtn = document.getElementById("createAnother");
   if (createAnotherBtn) {
     createAnotherBtn.addEventListener("click", () => {
       hideSuccessModal();
-      // Form is already reset, just focus on first input
       const firstInput = form.querySelector('input[name="nombre"]');
       if (firstInput) firstInput.focus();
     });
   }
 
-  // View list button
   const viewListBtn = document.getElementById("viewList");
   if (viewListBtn) {
     viewListBtn.addEventListener("click", () => {
@@ -202,7 +191,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Close modal when clicking outside
   const modal = document.getElementById("successModal");
   if (modal) {
     modal.addEventListener("click", (e) => {
