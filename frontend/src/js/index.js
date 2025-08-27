@@ -1,182 +1,214 @@
-const localDbPath = "../db/localDb.json";
-const form = document.getElementById("formulario");
-const tabla = document.getElementById("tablaAlumnos");
-const busqueda = document.getElementById("busqueda");
-let alumnos = JSON.parse(localStorage.getItem("alumnos")) || [];
+const form = document.querySelector("#createUser");
 
-function convertirFecha(fecha) {
-  if (fecha.includes("/")) {
-    const [dd, mm, yyyy] = fecha.split("/");
-    return `${yyyy}-${mm.padStart(2, "0")}-${dd.padStart(2, "0")}`;
-  }
-  return fecha;
-}
-
-function fechaAOrdenable(fecha) {
-  const f = convertirFecha(fecha);
-  return f.replace(/-/g, "");
-}
-
-async function readDatabase() {
-  
-}
-async function saveClient(e) {
-  e.preventDefault();
-
-
-  const database = await readDatabase();
-
-  const alumno = {
-    nombre: document.getElementById("nombre").value.trim(),
-    apellido: document.getElementById("apellido").value.trim(),
-    dni: document.getElementById("dni").value.trim(),
-    telefono: document.getElementById("telefono").value.trim(),
-    emergencia: document.getElementById("emergencia").value.trim(),
-    vencimiento: convertirFecha(
-      document.getElementById("vencimiento").value.trim()
-    ),
-    tipoCuota: document.getElementById("tipoCuota").value,
-    ultimaModificacion: new Date().toISOString().split("T")[0],
-  };
-
-  console.log(myFile);
-  localStorage.setItem("alumnos", JSON.stringify(alumnos));
-}
-
-function mostrarAlumnos(filtro = "") {
-  alumnos.sort((a, b) =>
-    fechaAOrdenable(a.vencimiento).localeCompare(fechaAOrdenable(b.vencimiento))
-  );
-
-  const filtrados = alumnos.filter((a) =>
-    Object.values(a).some((valor) =>
-      valor.toLowerCase().includes(filtro.toLowerCase())
-    )
-  );
-
-  tabla.innerHTML = "";
-  filtrados.forEach((a) => {
-    const fila = document.createElement("tr");
-    fila.innerHTML = `
-            <td><input value="${a.nombre}" onchange="editarCampo('${
-      a.dni
-    }', 'nombre', this.value)"></td>
-            <td><input value="${a.apellido}" onchange="editarCampo('${
-      a.dni
-    }', 'apellido', this.value)"></td>
-            <td><input value="${a.dni}" onchange="editarCampo('${
-      a.dni
-    }', 'dni', this.value)"></td>
-            <td><input value="${a.telefono}" onchange="editarCampo('${
-      a.dni
-    }', 'telefono', this.value)"></td>
-            <td><input value="${a.emergencia}" onchange="editarCampo('${
-      a.dni
-    }', 'emergencia', this.value)"></td>
-            <td><input type="date" value="${
-              a.vencimiento
-            }" onchange="editarCampo('${
-      a.dni
-    }', 'vencimiento', this.value)"></td>
-            <td>
-                <select onchange="editarCampo('${
-                  a.dni
-                }', 'tipoCuota', this.value)">
-                    <option value="Pilates Camilla" ${
-                      a.tipoCuota === "Pilates Camilla" ? "selected" : ""
-                    }>Pilates Camilla</option>
-                    <option value="Telas" ${
-                      a.tipoCuota === "Telas" ? "selected" : ""
-                    }>Telas</option>
-                    <option value="Clases Grupales" ${
-                      a.tipoCuota === "Clases Grupales" ? "selected" : ""
-                    }>Clases Grupales</option>
-                    <option value="Sala" ${
-                      a.tipoCuota === "Sala" ? "selected" : ""
-                    }>Sala</option>
-                    <option value="Mixta" ${
-                      a.tipoCuota === "Mixta" ? "selected" : ""
-                    }>Mixta</option>
-                    <option value="Sala-Pilates" ${
-                      a.tipoCuota === "Sala-Pilates" ? "selected" : ""
-                    }>Sala-Pilates</option>
-                    <option value="clases-Pilates" ${
-                      a.tipoCuota === "clases-Pilates" ? "selected" : ""
-                    }>clases-Pilates</option>
-                </select>
-            </td>
-            <td><button onclick="eliminarAlumno('${
-              a.dni
-            }')">Eliminar</button></td>
-        `;
-    tabla.appendChild(fila);
-  });
-}
-
-function editarCampo(dniOriginal, campo, valor) {
-  let alumnos = JSON.parse(localStorage.getItem("alumnos")) || [];
-  const index = alumnos.findIndex((a) => a.dni === dniOriginal);
-  if (index !== -1) {
-    if (campo === "vencimiento") valor = convertirFecha(valor);
-    alumnos[index][campo] = valor;
-    alumnos[index].ultimaModificacion = new Date().toISOString().split("T")[0];
-    localStorage.setItem("alumnos", JSON.stringify(alumnos));
-    mostrarAlumnos(busqueda.value);
+function showForm() {
+  if (form) {
+    form.style.display = "block";
   }
 }
 
-function eliminarAlumno(dni) {
-  if (!confirm("¿Eliminar este alumno?")) return;
-  let alumnos = JSON.parse(localStorage.getItem("alumnos")) || [];
-  alumnos = alumnos.filter((a) => a.dni !== dni);
-  localStorage.setItem("alumnos", JSON.stringify(alumnos));
-  mostrarAlumnos(busqueda.value);
+function hideForm() {
+  if (form) {
+    form.style.display = "none";
+  }
 }
 
-function exportarBackup() {
-  const alumnos = localStorage.getItem("alumnos");
-  const blob = new Blob([alumnos], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "backup_alumnos.json";
-  a.click();
-  URL.revokeObjectURL(url);
+function showOverlay() {
+  const overlay = document.querySelector(
+    ".fixed.inset-0.bg-black.bg-opacity-50"
+  );
+  if (overlay) {
+    overlay.classList.remove("hidden");
+  }
 }
 
-function importarBackup(event) {
-  const file = event.target.files[0];
-  if (!file) return;
+function hideOverlay() {
+  const overlay = document.querySelector(
+    ".fixed.inset-0.bg-black.bg-opacity-50"
+  );
+  if (overlay) {
+    overlay.classList.add("hidden");
+  }
+}
 
-  const reader = new FileReader();
-  reader.onload = function (e) {
+function showSuccessModal(clientData) {
+  const modal = document.getElementById("successModal");
+
+  localStorage.setItem(
+    "modalState",
+    JSON.stringify({
+      isVisible: true,
+      clientData: clientData,
+    })
+  );
+
+  // Populate modal with client data
+  document.getElementById(
+    "modalNombre"
+  ).textContent = `${clientData.name} ${clientData.lastName}`;
+  document.getElementById("modalDni").textContent = clientData.countryId;
+  document.getElementById("modalTipoCuota").textContent =
+    clientData.debtType || "No especificado";
+
+  hideForm();
+  showOverlay();
+
+  // Show modal
+  modal.classList.remove("hidden");
+
+  // Prevent body scroll when modal is open
+  document.body.style.overflow = "hidden";
+}
+
+function hideSuccessModal() {
+  const modal = document.getElementById("successModal");
+  modal.classList.add("hidden");
+
+  showForm();
+  hideOverlay();
+
+  localStorage.removeItem("modalState");
+
+  // Restore body scroll
+  document.body.style.overflow = "auto";
+}
+
+function restoreModalState() {
+  const savedState = localStorage.getItem("modalState");
+  if (savedState) {
     try {
-      const data = JSON.parse(e.target.result);
-      if (Array.isArray(data)) {
-        const convertidos = data.map((a) => ({
-          ...a,
-          vencimiento: convertirFecha(a.vencimiento),
-          ultimaModificacion:
-            a.ultimaModificacion || new Date().toISOString().split("T")[0],
-        }));
-        localStorage.setItem("alumnos", JSON.stringify(convertidos));
-        mostrarAlumnos();
-        alert("Datos importados correctamente.");
-      } else {
-        alert("Formato inválido.");
+      const { isVisible, clientData } = JSON.parse(savedState);
+      if (isVisible && clientData) {
+        showSuccessModal(clientData);
+        return true; // Return true if modal was restored
       }
-    } catch {
-      alert("Error al leer archivo.");
+    } catch (error) {
+      console.error("Error restoring modal state:", error);
+      localStorage.removeItem("modalState");
     }
+  }
+  return false; // Return false if no modal was restored
+}
+
+async function getUsers() {
+  const allUsers = await fetch("http://localhost:7000/api/users");
+  return allUsers;
+}
+
+async function saveClient() {
+  const formData = new FormData(form);
+  const newClient = {
+    name: formData.get("nombre"),
+    lastName: formData.get("apellido"),
+    countryId: formData.get("dni"),
+    phone: formData.get("telefono"),
+    emergencyPhone: formData.get("emergencia"),
+    expirement: formData.get("vencimiento"),
+    debtType: formData.get("tipoCuota"),
+    lastModification: new Date().toISOString().split("T")[0],
   };
-  reader.readAsText(file);
+
+  try {
+    const response = await createUser(newClient);
+    if (response.success) {
+      showSuccessModal(newClient);
+      form.reset();
+    } else {
+      showErrorAlert("No se pudo guardar el alumno.");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    showErrorAlert("Hubo un error al guardar el alumno.");
+  }
 }
 
-if (form) {
-  form.addEventListener("submit", saveClient);
+async function createUser(client) {
+  const response = await fetch("http://localhost:7000/api/users", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify(client),
+  });
+
+  const data = await response.json();
+  return data;
 }
 
-if (busqueda) {
-  busqueda.addEventListener("input", () => mostrarAlumnos(busqueda.value));
-  mostrarAlumnos();
+function showErrorAlert(message) {
+  const alertaExito = document.getElementById("alertaExito");
+  const alertaError = document.getElementById("alertaError");
+
+  // Hide success alert if visible
+  alertaExito.classList.add("hidden");
+
+  // Update message and show error alert
+  document.getElementById("errorMessage").textContent = message;
+  alertaError.classList.remove("hidden");
+
+  // Smooth scroll to alert
+  alertaError.scrollIntoView({ behavior: "smooth" });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  hideForm();
+  showOverlay();
+
+  const modalRestored = restoreModalState();
+
+  if (!modalRestored) {
+    showForm();
+    hideOverlay();
+  }
+
+  const submitButton = document.querySelector('button[type="button"]');
+
+  if (submitButton) {
+    submitButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      saveClient();
+    });
+  }
+
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+  }
+
+  // Close modal button
+  const closeModalBtn = document.getElementById("closeModal");
+  if (closeModalBtn) {
+    closeModalBtn.addEventListener("click", hideSuccessModal);
+  }
+
+  // Create another client button
+  const createAnotherBtn = document.getElementById("createAnother");
+  if (createAnotherBtn) {
+    createAnotherBtn.addEventListener("click", () => {
+      hideSuccessModal();
+      // Form is already reset, just focus on first input
+      const firstInput = form.querySelector('input[name="nombre"]');
+      if (firstInput) firstInput.focus();
+    });
+  }
+
+  // View list button
+  const viewListBtn = document.getElementById("viewList");
+  if (viewListBtn) {
+    viewListBtn.addEventListener("click", () => {
+      hideSuccessModal();
+    });
+  }
+
+  // Close modal when clicking outside
+  const modal = document.getElementById("successModal");
+  if (modal) {
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        hideSuccessModal();
+      }
+    });
+  }
+});

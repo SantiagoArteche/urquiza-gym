@@ -2,17 +2,53 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ABM de Alumnos - Gimnasio</title>
-    <link rel="stylesheet" href="../css/index.css" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "gym-dark": "#0f0f0f",
+              "gym-gray": "#1a1a1a",
+              "gym-accent": "#ff6b35",
+              "gym-blue": "#4a9eff",
+            },
+          },
+        },
+      };
+    </script>
   </head>
-  <body>
-    <header>
-      <h1 class="text-5xl text-center pt-2">Gestión de Alumnos - Gimnasio</h1>
-      <div class="flex justify-end mr-5 pt-12 text-3xl">
-        <a href="list.html" class="text-right text-blue-400"
-          >Listado de Clientes ></a
+  <body class="bg-gym-dark text-white min-h-screen font-sans">
+    <header class="bg-gym-gray border-b border-gray-800 shadow-lg">
+      <div class="max-w-7xl mx-auto px-4 py-6">
+        <h1
+          class="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-gym-accent to-gym-blue bg-clip-text text-transparent mb-6"
         >
+          Gestión de Alumnos - Gimnasio
+        </h1>
+        <div class="flex justify-end">
+          <a
+            href="./list.html"
+            class="text-gym-blue hover:text-gym-accent transition-colors duration-200 text-lg font-medium flex items-center"
+          >
+            Listado de Clientes
+            <svg
+              class="w-5 h-5 ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </a>
+        </div>
       </div>
     </header>
 
@@ -20,103 +56,110 @@
       class="w-full max-w-7xl mx-auto px-4 py-8 flex justify-center items-center"
     >
       <form
-        id="formulario"
-        class="mx-auto mt-8 p-12 rounded-lg shadow-lg space-y-6 min-w-fit min-h-fit"
+        id="createUser"
+        class="mx-auto mt-8 p-16 rounded-lg shadow-xl space-y-8 min-w-fit min-h-fit bg-gym-gray border border-gray-800 hidden"
       >
         <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 gap-x-20 mi"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 gap-x-24"
         >
-          <div class="space-y-2">
+          <div class="space-y-3">
             <label
               for="nombre"
-              class="block text-sm font-semibold text-gray-700"
-              >Nombre</label
+              class="block text-sm font-semibold text-gray-300"
             >
+              Nombre
+            </label>
+
             <input
               type="text"
-              id="nombre"
+              name="nombre"
               placeholder="Ingrese nombre"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
             />
           </div>
 
-          <div class="space-y-2">
+          <div class="space-y-3">
             <label
               for="apellido"
-              class="block text-sm font-semibold text-gray-700"
-              >Apellido</label
+              class="block text-sm font-semibold text-gray-300"
             >
+              Apellido
+            </label>
             <input
               type="text"
-              id="apellido"
+              name="apellido"
               placeholder="Ingrese apellido"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
             />
           </div>
 
-          <div class="space-y-2">
-            <label for="dni" class="block text-sm font-semibold text-gray-700"
-              >DNI</label
-            >
+          <div class="space-y-3">
+            <label for="dni" class="block text-sm font-semibold text-gray-300">
+              DNI
+            </label>
             <input
               type="number"
-              id="dni"
+              name="dni"
               placeholder="Ingrese DNI"
               min="0"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
             />
           </div>
 
-          <div class="space-y-2">
+          <div class="space-y-3">
             <label
               for="telefono"
-              class="block text-sm font-semibold text-gray-700"
-              >Teléfono</label
+              class="block text-sm font-semibold text-gray-300"
             >
+              Teléfono
+            </label>
             <input
               type="tel"
-              id="telefono"
+              name="telefono"
               placeholder="Ingrese teléfono"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
             />
           </div>
 
-          <div class="space-y-2">
+          <div class="space-y-3">
             <label
               for="emergencia"
-              class="block text-sm font-semibold text-gray-700"
-              >Tel. Emergencia</label
+              class="block text-sm font-semibold text-gray-300"
             >
+              Tel. Emergencia
+            </label>
             <input
               type="tel"
-              id="emergencia"
+              name="emergencia"
               placeholder="Ingrese tel. emergencia"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
             />
           </div>
 
-          <div class="space-y-2">
+          <div class="space-y-3">
             <label
               for="vencimiento"
-              class="block text-sm font-semibold text-gray-700"
-              >Vencimiento de la cuota</label
+              class="block text-sm font-semibold text-gray-300"
             >
+              Vencimiento de la cuota
+            </label>
             <input
               type="date"
-              id="vencimiento"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              name="vencimiento"
+              class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
             />
           </div>
 
-          <div class="space-y-2 md:col-span-2 lg:col-spa">
+          <div class="space-y-3 md:col-span-2 lg:col-span-1">
             <label
               for="tipoCuota"
-              class="block text-sm font-semibold text-gray-700"
-              >Tipo de cuota</label
+              class="block text-sm font-semibold text-gray-300"
             >
+              Tipo de cuota
+            </label>
             <select
-              id="tipoCuota"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white"
+              name="tipoCuota"
+              class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-gym-accent focus:ring-offset-2 focus:ring-offset-gym-gray transition-all duration-200"
             >
               <option value="">Seleccione tipo de cuota</option>
               <option value="Pilates Camilla">Pilates Camilla</option>
@@ -130,15 +173,146 @@
           </div>
         </div>
 
-        <div class="mt-6">
+        <div class="mt-8">
           <button
-            type="submit"
-            class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 font-semibold"
+            type="button"
+            class="w-full bg-gym-accent hover:bg-orange-600 text-white py-4 px-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-gym-accent focus:ring-offset-2 focus:ring-offset-gym-gray transition-colors duration-200 font-semibold text-lg shadow-lg"
           >
             Guardar Alumno
           </button>
         </div>
       </form>
+
+      <div id="alertaExito" class="hidden mt-8 max-w-7xl mx-auto px-4">
+        <div
+          class="bg-green-900/50 border border-green-500 text-green-200 px-6 py-4 rounded-lg flex items-center space-x-4"
+        >
+          <svg
+            class="w-6 h-6 text-green-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <span class="text-lg">Alumno guardado correctamente!</span>
+        </div>
+      </div>
+
+      <div id="alertaError" class="hidden mt-8 max-w-7xl mx-auto px-4">
+        <div
+          class="bg-red-900/50 border border-red-500 text-red-200 px-6 py-4 rounded-lg flex items-center space-x-4"
+        >
+          <svg
+            class="w-6 h-6 text-red-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <span class="text-lg" id="errorMessage"
+            >Hubo un error al guardar el alumno.</span
+          >
+        </div>
+      </div>
+
+      <div
+        id="successModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+      >
+        <div
+          class="bg-gym-gray border border-gray-700 rounded-xl shadow-2xl max-w-md w-full mx-4 p-8"
+        >
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center space-x-3">
+              <div class="bg-green-500 rounded-full p-2">
+                <svg
+                  class="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-bold text-white">¡Cliente Creado!</h3>
+            </div>
+            <button
+              id="closeModal"
+              class="text-gray-400 hover:text-white transition-colors"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <p class="text-gray-300 text-center">
+              El alumno ha sido registrado exitosamente en el sistema.
+            </p>
+
+            <div class="bg-gym-dark rounded-lg p-4 space-y-2">
+              <div class="flex justify-between">
+                <span class="text-gray-400">Nombre:</span>
+                <span class="text-white font-medium" id="modalNombre">-</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">DNI:</span>
+                <span class="text-white font-medium" id="modalDni">-</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Tipo de Cuota:</span>
+                <span class="text-white font-medium" id="modalTipoCuota"
+                  >-</span
+                >
+              </div>
+            </div>
+
+            <div class="flex space-x-3 mt-6">
+              <button
+                id="createAnother"
+                class="flex-1 bg-gym-accent hover:bg-orange-600 text-white py-3 px-4 rounded-lg transition-colors font-medium"
+              >
+                Crear Otro
+              </button>
+              <a
+                href="./list.html"
+                id="viewList"
+                class="flex-1 bg-gym-blue hover:bg-blue-600 text-white py-3 px-4 rounded-lg transition-colors font-medium text-center"
+              >
+                Ver Listado
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
 
     <script src="../js/index.js"></script>
