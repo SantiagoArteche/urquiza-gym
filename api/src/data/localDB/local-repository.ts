@@ -26,6 +26,24 @@ export class LocalRepository implements IRepository {
     return [null, foundEntity];
   }
 
+  getByCountryId(countryId: string, key?: string) {
+    if (!key) return ["Missing key"];
+
+    const file = this.getAll();
+
+    const entities = file[key];
+
+    if (!entities.length) return ["The searched property must be an array"];
+
+    const foundEntity = entities.find(
+      (entity: any) => entity.countryId === countryId
+    );
+
+    if (!foundEntity) return ["User not found"];
+
+    return [null, foundEntity];
+  }
+
   deleteById(id: number, entityKey?: string) {
     if (!entityKey) return ["Missing key"];
 
@@ -46,7 +64,7 @@ export class LocalRepository implements IRepository {
     return [null, true];
   }
 
-  createId(entities: any[]) {
+  buildId(entities: any[]) {
     if (!entities.length) return 1;
 
     entities.sort((a: any, b: any) => a.id - b.id);
@@ -55,19 +73,19 @@ export class LocalRepository implements IRepository {
     return entities[lastIndex].id + 1;
   }
 
-  create(data: any, entityKey?: string) {
-    if (!entityKey) return { error: "Missing key" };
+  create(data: any, key?: string) {
+    if (!key) return { error: "Missing key" };
 
     const file = this.getAll();
 
-    const entities = file[entityKey];
+    const entities = file[key];
     if (!entities.length)
       return { error: "The searched property must be an array" };
 
-    const id = this.createId(entities);
+    const id = this.buildId(entities);
 
     const newEntity = { ...data, id };
-    file[entityKey] = [...entities, newEntity];
+    file[key] = [...entities, newEntity];
 
     fs.writeFileSync(dbPath, JSON.stringify(file));
 

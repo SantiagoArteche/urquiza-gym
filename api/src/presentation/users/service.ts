@@ -17,6 +17,10 @@ export class UserService {
     return this.repository.getById(id, "users");
   }
 
+  getUserByCountryId(countryId: string) {
+    return this.repository.getByCountryId(countryId, "users");
+  }
+
   deleteUser(id: number) {
     return this.repository.deleteById(id, "users");
   }

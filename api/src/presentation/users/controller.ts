@@ -23,6 +23,16 @@ export class UserController {
     return res.json(foundUser);
   };
 
+  getUserByCountryId = (req: Request, res: Response) => {
+    const { countryId } = req.params;
+
+    const [error, foundUser] = this.service.getUserByCountryId(countryId);
+
+    if (error) return res.json({ message: error });
+
+    return res.json(foundUser);
+  };
+
   createUser = async (req: Request, res: Response) => {
     const {
       name,
@@ -44,9 +54,11 @@ export class UserController {
       debtType,
     };
 
-    const newUser = await this.service.createUser(data);
+    try {
+      const newUser = await this.service.createUser(data);
 
-    return res.json(newUser);
+      return res.status(201).json({ success: true, user: newUser });
+    } catch (error) {}
   };
 
   deleteUser = (req: Request, res: Response) => {

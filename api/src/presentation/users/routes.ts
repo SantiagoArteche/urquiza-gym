@@ -13,6 +13,7 @@ export class UserRoutes {
 
     router.get("/", controller.getUsers);
     router.get("/:id", controller.getUserById);
+    router.get("/country-id/:countryId", controller.getUserByCountryId);
     router.delete("/:id", controller.deleteUser);
     router.post("/", controller.createUser);
 
