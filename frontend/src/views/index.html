@@ -74,6 +74,7 @@
               type="text"
               name="nombre"
               placeholder="Ingrese nombre"
+              required
               class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
             />
           </div>
@@ -89,6 +90,7 @@
               type="text"
               name="apellido"
               placeholder="Ingrese apellido"
+              required
               class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
             />
           </div>
@@ -100,6 +102,7 @@
             <input
               type="number"
               name="dni"
+              required
               placeholder="Ingrese DNI"
               min="0"
               class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
@@ -116,6 +119,7 @@
             <input
               type="tel"
               name="telefono"
+              required
               placeholder="Ingrese teléfono"
               class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
             />
@@ -146,6 +150,7 @@
             <input
               type="date"
               name="vencimiento"
+              required
               class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
             />
           </div>
@@ -159,6 +164,7 @@
             </label>
             <select
               name="tipoCuota"
+              required
               class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-gym-accent focus:ring-offset-2 focus:ring-offset-gym-gray transition-all duration-200"
             >
               <option value="">Seleccione tipo de cuota</option>
@@ -175,7 +181,7 @@
 
         <div class="mt-8">
           <button
-            type="button"
+            type="submit"
             class="w-full bg-gym-accent hover:bg-orange-600 text-white py-4 px-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-gym-accent focus:ring-offset-2 focus:ring-offset-gym-gray transition-colors duration-200 font-semibold text-lg shadow-lg"
           >
             Guardar Alumno

@@ -75,14 +75,14 @@ function restoreModalState() {
       const { isVisible, clientData } = JSON.parse(savedState);
       if (isVisible && clientData) {
         showSuccessModal(clientData);
-        return true; 
+        return true;
       }
     } catch (error) {
       console.error("Error restoring modal state:", error);
       localStorage.removeItem("modalState");
     }
   }
-  return false; 
+  return false;
 }
 
 async function getUsers() {
@@ -103,12 +103,22 @@ async function saveClient() {
     lastModification: new Date().toISOString().split("T")[0],
   };
 
+  if (!formData.get("dni").length) {
+    showErrorAlert(`Valor de dni inválido`);
+    return;
+  }
+
   try {
     const response = await createUser(newClient);
     if (response.success) {
       showSuccessModal(newClient);
       form.reset();
     } else {
+      if (response.error === "Unique key already exists") {
+        showErrorAlert(`Ya existe un usuario con el dni ${response.uniqueKey}`);
+        return;
+      }
+
       showErrorAlert("No se pudo guardar el alumno.");
     }
   } catch (error) {
@@ -153,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
     hideOverlay();
   }
 
-  const submitButton = document.querySelector('button[type="button"]');
+  const submitButton = document.querySelector('button[type="submit"]');
 
   if (submitButton) {
     submitButton.addEventListener("click", (e) => {

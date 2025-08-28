@@ -1,3 +1,5 @@
+const search = document.querySelectorAll("#searchUser");
+
 async function getUsers() {
   try {
     const request = await fetch("http://localhost:7000/api/users");
