@@ -4,8 +4,12 @@ import { User } from "./types";
 export class UserService {
   constructor(private readonly repository: IRepository) {}
 
-  getUsers(): User[] {
-    const file = this.repository.getAll();
+  getUsers(search: string): User[] {
+    const file = this.repository.getAll(
+      "users",
+      "fullNameAndCountryId",
+      search
+    );
     return file.users;
   }
 

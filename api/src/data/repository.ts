@@ -1,5 +1,11 @@
 export interface IRepository {
-  getAll: (search?: string, limit?: number, offset?: number) => any;
+  getAll: (
+    entityKey: string,
+    key: string,
+    search?: string,
+    limit?: number,
+    offset?: number
+  ) => any;
   getById: (id: number, key?: string) => any;
   getByCountryId: (countryId: string, key?: string) => any;
   deleteById: (id: number, key?: string) => any;

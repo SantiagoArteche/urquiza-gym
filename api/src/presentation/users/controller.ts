@@ -5,7 +5,9 @@ export class UserController {
   constructor(private readonly service: UserService) {}
 
   getUsers = (req: Request, res: Response) => {
-    const users = this.service.getUsers();
+    const { search } = req.query;
+
+    const users = this.service.getUsers(search as string);
 
     return res.json({ users });
   };
@@ -57,13 +59,11 @@ export class UserController {
     const newUser = await this.service.createUser(data);
 
     if (newUser.error) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          error: newUser.error,
-          uniqueKey: newUser.uniqueKey,
-        });
+      return res.status(400).json({
+        success: false,
+        error: newUser.error,
+        uniqueKey: newUser.uniqueKey,
+      });
     }
 
     return res.status(201).json({ success: true, user: newUser });
