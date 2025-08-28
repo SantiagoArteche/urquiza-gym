@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editar Usuario - Gimnasio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "gym-dark": "#0f0f0f",
+              "gym-gray": "#1a1a1a",
+              "gym-accent": "#ff6b35",
+              "gym-blue": "#4a9eff",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-gym-dark text-white min-h-screen font-sans">
+    <header class="bg-gym-gray border-b border-gray-800 shadow-lg">
+      <div class="max-w-7xl mx-auto px-4 py-6">
+        <h1
+          class="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-gym-accent to-gym-blue bg-clip-text text-transparent mb-6"
+        >
+          Editar Usuario
+        </h1>
+        <div class="flex justify-start">
+          <a
+            href="list.html"
+            class="text-gym-blue hover:text-gym-accent transition-colors duration-200 text-lg font-medium flex items-center"
+          >
+            <svg
+              class="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+            Volver a la lista
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="w-full max-w-4xl mx-auto px-4 py-8">
+      <div class="bg-gym-gray rounded-lg shadow-xl p-8 border border-gray-800">
+        <form id="editUserForm" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label
+                for="name"
+                class="block text-sm font-medium text-gray-300 mb-2"
+                >Nombre</label
+              >
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
+              />
+            </div>
+
+            <div>
+              <label
+                for="lastName"
+                class="block text-sm font-medium text-gray-300 mb-2"
+                >Apellido</label
+              >
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                required
+                class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
+              />
+            </div>
+
+            <div>
+              <label
+                for="countryId"
+                class="block text-sm font-medium text-gray-300 mb-2"
+                >DNI</label
+              >
+              <input
+                type="text"
+                id="countryId"
+                name="countryId"
+                required
+                class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
+              />
+            </div>
+
+            <div>
+              <label
+                for="phone"
+                class="block text-sm font-medium text-gray-300 mb-2"
+                >Teléfono</label
+              >
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                required
+                class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
+              />
+            </div>
+
+            <div>
+              <label
+                for="emergencyPhone"
+                class="block text-sm font-medium text-gray-300 mb-2"
+                >Teléfono de Emergencia</label
+              >
+              <input
+                type="tel"
+                id="emergencyPhone"
+                name="emergencyPhone"
+                class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
+              />
+            </div>
+
+            <div>
+              <label
+                for="expirement"
+                class="block text-sm font-medium text-gray-300 mb-2"
+                >Fecha de Vencimiento</label
+              >
+              <input
+                type="date"
+                id="expirement"
+                name="expirement"
+                class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
+              />
+            </div>
+
+            <div class="md:col-span-2">
+              <label
+                for="debtType"
+                class="block text-sm font-medium text-gray-300 mb-2"
+                >Tipo de Cuota</label
+              >
+              <select
+                id="debtType"
+                name="debtType"
+                class="w-full px-4 py-3 bg-gym-dark border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-gym-accent focus:border-transparent transition-all duration-200"
+              >
+                <option value="">Seleccione tipo de cuota</option>
+                <option value="Pilates Camilla">Pilates Camilla</option>
+                <option value="Telas">Telas</option>
+                <option value="Clases Grupales">Clases Grupales</option>
+                <option value="Sala">Sala</option>
+                <option value="Mixta">Mixta</option>
+                <option value="Sala-Pilates">Sala-Pilates</option>
+                <option value="clases-Pilates">Clases-Pilates</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-4 pt-6">
+            <button
+              type="button"
+              onclick="window.location.href='index.html'"
+              class="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors duration-200"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="px-6 py-3 bg-gym-accent hover:bg-orange-600 text-white font-medium rounded-lg transition-colors duration-200"
+            >
+              Guardar Cambios
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <script src="../js/edit-user.js"></script>
+  </body>
+</html>

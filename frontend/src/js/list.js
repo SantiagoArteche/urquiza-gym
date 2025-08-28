@@ -121,16 +121,16 @@ function addUsersToHtml(users) {
   });
 }
 
+function editUser(userId) {
+  window.location.href = "edit-user.html?id=" + userId;
+}
+
 function showEmptyState() {
   const usersContainer = document.querySelector("#tablaAlumnos");
   const emptyState = document.querySelector("#emptyState");
 
   usersContainer.innerHTML = "";
   emptyState.classList.remove("hidden");
-}
-
-function editUser(userId) {
-  console.log("Edit user:", userId);
 }
 
 async function deleteUser(userId) {
