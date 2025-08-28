@@ -65,7 +65,7 @@ async function handleFormSubmit(e) {
 
     if (response.ok) {
       alert("Usuario actualizado correctamente");
-      window.location.href = "index.html";
+      window.location.href = "list.html";
     } else {
       alert(
         "Error al actualizar el usuario: " +

@@ -33,6 +33,7 @@ function debounceSearch(query) {
       getUsers().then((data) => {
         if (data.users?.length > 0) {
           addUsersToHtml(data.users);
+          hideEmptyState();
         } else {
           showEmptyState();
         }
@@ -41,6 +42,7 @@ function debounceSearch(query) {
       searchUsers(query).then((data) => {
         if (data.users?.length > 0) {
           addUsersToHtml(data.users);
+          hideEmptyState();
         } else {
           showEmptyState();
         }
@@ -62,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
   getUsers().then((data) => {
     if (data.users?.length > 0) {
       addUsersToHtml(data.users);
+      hideEmptyState();
     } else {
       showEmptyState();
     }
@@ -131,6 +134,14 @@ function showEmptyState() {
 
   usersContainer.innerHTML = "";
   emptyState.classList.remove("hidden");
+}
+
+function hideEmptyState() {
+  const emptyState = document.querySelector("#emptyState");
+
+  if (!emptyState.classList.contains("hidden")) {
+    emptyState.classList.add("hidden");
+  }
 }
 
 async function deleteUser(userId) {
