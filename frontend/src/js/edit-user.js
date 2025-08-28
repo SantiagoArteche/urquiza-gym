@@ -1,7 +1,6 @@
 let userId = null;
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Obtener el ID del usuario de la URL
   const urlParams = new URLSearchParams(window.location.search);
   userId = urlParams.get("id");
 
