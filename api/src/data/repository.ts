@@ -3,5 +3,5 @@ export interface IRepository {
   getById: (id: number, key?: string) => any;
   getByCountryId: (countryId: string, key?: string) => any;
   deleteById: (id: number, key?: string) => any;
-  create: (data: any, key?: string) => any;
+  create: (data: any, key?: string, uniqueKey?: string) => any;
 }

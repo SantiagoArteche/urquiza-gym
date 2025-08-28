@@ -73,7 +73,7 @@ export class LocalRepository implements IRepository {
     return entities[lastIndex].id + 1;
   }
 
-  create(data: any, key?: string) {
+  create(data: any, key?: string, uniqueKey?: string) {
     if (!key) return { error: "Missing key" };
 
     const file = this.getAll();
@@ -85,6 +85,20 @@ export class LocalRepository implements IRepository {
     const id = this.buildId(entities);
 
     const newEntity = { ...data, id };
+
+    if (uniqueKey) {
+      const hasRepeatedCountryId = entities.find(
+        (entity: any) => entity[uniqueKey] === newEntity[uniqueKey]
+      );
+
+      if (hasRepeatedCountryId) {
+        return {
+          error: `Unique key already exists`,
+          uniqueKey: newEntity[uniqueKey],
+        };
+      }
+    }
+
     file[key] = [...entities, newEntity];
 
     fs.writeFileSync(dbPath, JSON.stringify(file));

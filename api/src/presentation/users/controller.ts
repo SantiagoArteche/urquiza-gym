@@ -54,11 +54,19 @@ export class UserController {
       debtType,
     };
 
-    try {
-      const newUser = await this.service.createUser(data);
+    const newUser = await this.service.createUser(data);
 
-      return res.status(201).json({ success: true, user: newUser });
-    } catch (error) {}
+    if (newUser.error) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          error: newUser.error,
+          uniqueKey: newUser.uniqueKey,
+        });
+    }
+
+    return res.status(201).json({ success: true, user: newUser });
   };
 
   deleteUser = (req: Request, res: Response) => {

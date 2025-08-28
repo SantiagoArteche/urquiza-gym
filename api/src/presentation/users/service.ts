@@ -10,7 +10,7 @@ export class UserService {
   }
 
   createUser(data: User) {
-    return this.repository.create(data, "users");
+    return this.repository.create(data, "users", "countryId");
   }
 
   getUserById(id: number) {
