@@ -69,6 +69,38 @@ export class UserController {
     return res.status(201).json({ success: true, user: newUser });
   };
 
+  updateUserById = (req: Request, res: Response) => {
+    const { id } = req.params;
+    const {
+      name,
+      lastName,
+      phone,
+      countryId,
+      emergencyPhone,
+      expirement,
+      debtType,
+    } = req.body;
+
+    const data = {
+      name,
+      lastName,
+      phone,
+      countryId,
+      emergencyPhone,
+      expirement,
+      debtType,
+    };
+
+    if (isNaN(+id))
+      return res.status(400).json({ message: "The id must be a number" });
+
+    const [error, updatedUser] = this.service.updateUserById(+id, data);
+
+    if (error) return res.json({ message: error });
+
+    return res.json(updatedUser);
+  };
+
   deleteUser = (req: Request, res: Response) => {
     const { id } = req.params;
 

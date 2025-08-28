@@ -25,6 +25,10 @@ export class UserService {
     return this.repository.getByCountryId(countryId, "users");
   }
 
+  updateUserById(id: number, data: object) {
+    return this.repository.updateById(id, data, "users");
+  }
+
   deleteUser(id: number) {
     return this.repository.deleteById(id, "users");
   }
