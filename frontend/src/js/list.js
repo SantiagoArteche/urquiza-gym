@@ -75,7 +75,6 @@ function addUsersToHtml(users) {
   users.forEach((user) => {
     const tr = document.createElement("tr");
     tr.className = "hover:bg-gray-800 transition-colors duration-150";
-    console.error(user);
     tr.innerHTML = `
       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">${
         user.name || ""
