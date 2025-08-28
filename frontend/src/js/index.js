@@ -1,3 +1,17 @@
+tailwind.config.theme = {
+  extend: {
+    colors: {
+      "gym-dark": "#0f0f0f",
+      "gym-gray": "#1a1a1a",
+      "gym-light-gray": "#2a2a2a",
+      "gym-accent": "#ff6b35",
+      "gym-blue": "#4a9eff",
+      "gym-text": "#e5e5e5",
+      "gym-text-muted": "#a0a0a0",
+    },
+  },
+};
+
 const form = document.querySelector("#createUser");
 
 function showForm() {
