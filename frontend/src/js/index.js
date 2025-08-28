@@ -169,6 +169,12 @@ document.addEventListener("DOMContentLoaded", () => {
     submitButton.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
       saveClient();
     });
   }

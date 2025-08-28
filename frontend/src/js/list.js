@@ -1,5 +1,7 @@
 const search = document.querySelectorAll("#searchUser");
 
+let searchTimeout;
+
 async function getUsers() {
   try {
     const request = await fetch("http://localhost:7000/api/users");
@@ -11,7 +13,52 @@ async function getUsers() {
   }
 }
 
+async function searchUsers(query) {
+  try {
+    const request = await fetch(
+      `http://localhost:7000/api/users?search=${query}`
+    );
+    const users = await request.json();
+    return users;
+  } catch (error) {
+    console.error("Error searching users:", error);
+    return { users: [] };
+  }
+}
+
+function debounceSearch(query) {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    if (query.trim() === "") {
+      getUsers().then((data) => {
+        if (data.users?.length > 0) {
+          addUsersToHtml(data.users);
+        } else {
+          showEmptyState();
+        }
+      });
+    } else {
+      searchUsers(query).then((data) => {
+        if (data.users?.length > 0) {
+          addUsersToHtml(data.users);
+        } else {
+          showEmptyState();
+        }
+      });
+    }
+  }, 300);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  const searchInput = document.querySelector("#searchUser");
+
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      const query = e.target.value;
+      debounceSearch(query);
+    });
+  }
+
   getUsers().then((data) => {
     if (data.users?.length > 0) {
       addUsersToHtml(data.users);
