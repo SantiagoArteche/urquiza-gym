@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+:root {
+  --gym-dark: #0f0f0f;
+  --gym-gray: #1a1a1a;
+  --gym-light-gray: #2a2a2a;
+  --gym-accent: #ff6b35;
+  --gym-blue: #4a9eff;
+  --gym-text: #e5e5e5;
+  --gym-text-muted: #a0a0a0;
+}
+
+/* To hidden the number buttons on Chrome, Safari, Edge */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* To hidden the number buttons on Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
