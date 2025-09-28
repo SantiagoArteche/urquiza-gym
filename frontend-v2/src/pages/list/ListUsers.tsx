@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ListUsersView } from "./ListUsers.view";
 import type { User } from "../../types";
 
@@ -16,6 +17,7 @@ export default function ListUsers() {
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchUsers();
@@ -52,6 +54,7 @@ export default function ListUsers() {
       setSearch={setSearch}
       columns={columns}
       fetchUsers={fetchUsers}
+      navigate={navigate}
     />
   );
 }

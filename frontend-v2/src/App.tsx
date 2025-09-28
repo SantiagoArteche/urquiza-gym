@@ -3,6 +3,7 @@ import { Route, BrowserRouter, Routes } from "react-router-dom";
 import CreateUser from "./pages/create-user/CreateUser";
 import Header from "./pages/layout/Header";
 import ListUsers from "./pages/list/ListUsers";
+import EditUser from "./pages/edit-user/EditUser";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/create" element={<CreateUser />} />
           <Route path="/list" element={<ListUsers />} />
+          <Route path="/edit/:id" element={<EditUser />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,0 +1,121 @@
+import type { EditUserViewProps } from "../../types";
+
+export default function EditUserView({
+  values,
+  handleChange,
+  handleSubmit,
+  isSubmitting,
+  error,
+  navigate,
+}: EditUserViewProps) {
+  return (
+    <div className="min-h-screen bg-gray-950 text-white font-sans py-8">
+      <div className="max-w-xl mx-auto py-8  bg-gray-900 rounded-xl shadow-lg">
+        <h2 className="text-2xl font-bold mb-6 text-center text-white">
+          Editar alumno
+        </h2>
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4 bg-gray-800 p-6 rounded shadow"
+        >
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-200">
+              Nombre
+            </label>
+            <input
+              name="name"
+              value={values.name}
+              onChange={handleChange}
+              className="w-full border rounded px-3 py-2 bg-gray-900 text-white border-gray-700"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-200">
+              Apellido
+            </label>
+            <input
+              name="lastName"
+              value={values.lastName}
+              onChange={handleChange}
+              className="w-full border rounded px-3 py-2 bg-gray-900 text-white border-gray-700"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-200">
+              País
+            </label>
+            <input
+              name="countryId"
+              value={values.countryId}
+              onChange={handleChange}
+              className="w-full border rounded px-3 py-2 bg-gray-900 text-white border-gray-700"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-200">
+              Teléfono
+            </label>
+            <input
+              name="phone"
+              value={values.phone}
+              onChange={handleChange}
+              className="w-full border rounded px-3 py-2 bg-gray-900 text-white border-gray-700"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-200">
+              Teléfono de emergencia
+            </label>
+            <input
+              name="emergencyPhone"
+              value={values.emergencyPhone}
+              onChange={handleChange}
+              className="w-full border rounded px-3 py-2 bg-gray-900 text-white border-gray-700"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-200">
+              Vencimiento
+            </label>
+            <input
+              name="expirement"
+              value={values.expirement}
+              onChange={handleChange}
+              className="w-full border rounded px-3 py-2 bg-gray-900 text-white border-gray-700"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-200">
+              Tipo de deuda
+            </label>
+            <input
+              name="debtType"
+              value={values.debtType}
+              onChange={handleChange}
+              className="w-full border rounded px-3 py-2 bg-gray-900 text-white border-gray-700"
+            />
+          </div>
+          {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+          <div className="flex gap-4 pt-4">
+            <button
+              type="button"
+              className="bg-red-500 px-4 py-2 rounded hover:bg-gray-300"
+              onClick={() => navigate("/list")}
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+              disabled={isSubmitting}
+            >
+              Guardar cambios
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
