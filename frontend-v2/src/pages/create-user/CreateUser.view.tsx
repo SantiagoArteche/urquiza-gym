@@ -72,13 +72,13 @@ export const CreateUserView = ({
                 htmlFor="countryId"
                 className="block text-sm font-semibold text-gray-200"
               >
-                ID País
+                DNI
               </label>
               <input
                 name="countryId"
                 value={values.countryId}
                 onChange={handleChange}
-                placeholder="Ingrese ID país"
+                placeholder="Ingrese DNI"
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
               />
             </div>
@@ -213,7 +213,7 @@ export const CreateUserView = ({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">ID País:</span>
+                    <span className="text-gray-400">DNI:</span>
                     <span className="text-white font-medium">
                       {submittedData.countryId}
                     </span>
