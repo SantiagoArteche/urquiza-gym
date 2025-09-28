@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ListUsersView } from "./ListUsers.view";
-import type { User } from "../../types";
+import type { User } from "../../types/index";
 
 const columns = [
   { key: "name", label: "Nombre" },

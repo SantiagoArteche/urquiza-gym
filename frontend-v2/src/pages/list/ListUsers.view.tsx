@@ -106,17 +106,17 @@ export const ListUsersView = ({
                         >
                           {col.key === "expirement" ? (
                             <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-900 text-green-200">
-                              {user[col.key] || "N/A"}
+                              {user[col.key as keyof typeof user] || "N/A"}
                             </span>
                           ) : (
-                            user[col.key] || ""
+                            user[col.key as keyof typeof user] || ""
                           )}
                         </td>
                       ))}
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                         <button
                           className="text-blue-400 hover:text-orange-500 transition-colors duration-200"
-                          onClick={() => navigate(`/edit/${user.id}`)}
+                          onClick={() => navigate(`/edit-user/${user.id}`)}
                         >
                           <svg
                             className="w-5 h-5"

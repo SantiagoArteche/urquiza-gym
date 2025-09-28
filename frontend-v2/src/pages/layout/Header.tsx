@@ -8,7 +8,7 @@ const Header = () => {
           <h1 className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-orange-500 to-blue-500 bg-clip-text text-transparent mb-6">
             Gestión de Alumnos - Gimnasio
           </h1>
-          <nav className="flex justify-end gap-4">
+          <nav className="flex justify-center gap-4">
             <Link
               to="/"
               className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
@@ -16,16 +16,28 @@ const Header = () => {
               Home
             </Link>
             <Link
-              to="/create"
+              to="/create-user"
               className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
             >
               Alta Alumno
             </Link>
             <Link
-              to="/list"
+              to="/list-users"
               className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
             >
               Listado Alumnos
+            </Link>
+            <Link
+              to="/create-teacher"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+            >
+              Alta Profesor
+            </Link>
+            <Link
+              to="/list-teachers"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+            >
+              Listado Profesores
             </Link>
           </nav>
         </div>

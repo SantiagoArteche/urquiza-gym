@@ -17,37 +17,36 @@ export default function CreateUser() {
     debtType: "",
   });
 
-  const { values, handleChange, handleSubmit, resetForm, isSubmitting } =
-    useFormik({
-      initialValues: {
-        name: "",
-        lastName: "",
-        phone: "",
-        countryId: "",
-        emergencyPhone: "",
-        expirement: "",
-        debtType: "",
-      },
-      onSubmit: async (formValues, { resetForm }) => {
-        try {
-          await fetch("http://localhost:7000/api/users", {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify(formValues),
-          });
+  const { values, handleChange, handleSubmit, isSubmitting } = useFormik({
+    initialValues: {
+      name: "",
+      lastName: "",
+      phone: "",
+      countryId: "",
+      emergencyPhone: "",
+      expirement: "",
+      debtType: "",
+    },
+    onSubmit: async (formValues, { resetForm }) => {
+      try {
+        await fetch("http://localhost:7000/api/users", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify(formValues),
+        });
 
-          setSubmittedData(formValues);
-          setShowSuccess(true);
-          resetForm();
-        } catch {
-          setErrorMessage("Error al crear el alumno. Intente nuevamente.");
-          setShowError(true);
-          setTimeout(() => setShowError(false), 5000);
-        }
-      },
-    });
+        setSubmittedData(formValues);
+        setShowSuccess(true);
+        resetForm();
+      } catch {
+        setErrorMessage("Error al crear el alumno. Intente nuevamente.");
+        setShowError(true);
+        setTimeout(() => setShowError(false), 5000);
+      }
+    },
+  });
 
   return (
     <CreateUserView
