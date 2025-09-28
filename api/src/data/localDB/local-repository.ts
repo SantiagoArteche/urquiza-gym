@@ -1,5 +1,5 @@
 import fs from "fs";
-import { IRepository } from "../repository";
+import type { IRepository } from "../repository";
 import path from "path";
 
 const dbPath = path.join(__dirname, "database.json");
@@ -11,24 +11,24 @@ export class LocalRepository implements IRepository {
   }
 
   getAll(
-    entityKey: string,
+    entityKey: "users" | "teachers",
     key: string,
     search?: string,
     limit?: number,
     offset?: number
   ) {
     const file = this.#getFile();
+    let collection = file[entityKey] || [];
 
     if (search) {
-      file[entityKey] = this.#filterEntitiesBySearch(
-        file,
-        entityKey,
-        key,
-        search
-      );
+      collection = this.#filterEntitiesBySearch(file, entityKey, key, search);
     }
 
-    return file;
+    if (typeof offset === "number" && typeof limit === "number") {
+      collection = collection.slice(offset, offset + limit);
+    }
+
+    return { [entityKey]: collection };
   }
 
   #filterEntitiesBySearch(
@@ -37,40 +37,45 @@ export class LocalRepository implements IRepository {
     key: string,
     search: string
   ) {
-    return file[entityKey].filter((entity: any) => {
-      if (key === "fullName" || "fullNameOrCountryId") {
+    return (file[entityKey] || []).filter((entity: any) => {
+      if (
+        key === "fullName" ||
+        key === "fullNameOrCountryId" ||
+        key === "fullNameAndCountryId"
+      ) {
         return this.#specialFilters(entity, key, search);
       }
-
-      return entity[key].startsWith(search) || entity[key].endsWith(search);
+      const value = (entity[key] || "").toString().toLowerCase();
+      const term = search.toLowerCase();
+      return value.startsWith(term) || value.endsWith(term);
     });
   }
 
   #specialFilters(entity: any, key: string, search: string) {
+    const term = search.toLowerCase();
     if (key === "fullName") {
-      return this.#getEntityByFullName(entity, search);
+      return this.#getEntityByFullName(entity, term);
     }
-
-    const countryId = entity.countryId.toLowerCase().trim();
+    const countryId = (entity.countryId || "").toLowerCase().trim();
     return (
-      this.#getEntityByFullName(entity, search) ||
-      countryId.startsWith(search.toLowerCase())
+      this.#getEntityByFullName(entity, term) || countryId.startsWith(term)
     );
   }
 
   #getEntityByFullName(entity: any, search: string) {
-    const name = entity.name.toLowerCase().trim();
-    const lastName = entity.lastName.toLowerCase().trim();
+    const name = (entity.name || "").toLowerCase().trim();
+    const lastName = (entity.lastName || "").toLowerCase().trim();
+    const term = search.toLowerCase().trim();
 
     return (
-      name.startsWith(search.toLowerCase()) ||
-      name.endsWith(search.toLowerCase()) ||
-      lastName.startsWith(search.toLowerCase()) ||
-      lastName.endsWith(search.toLowerCase())
+      name.startsWith(term) ||
+      name.endsWith(term) ||
+      lastName.startsWith(term) ||
+      lastName.endsWith(term)
     );
   }
 
-  getById(id: number, entityKey?: string) {
+  getById(id: number, entityKey?: "users" | "teachers") {
     if (!entityKey) return ["Missing key"];
 
     const file = this.#getFile();
@@ -86,7 +91,7 @@ export class LocalRepository implements IRepository {
     return [null, foundEntity];
   }
 
-  getByCountryId(countryId: string, key?: string) {
+  getByCountryId(countryId: string, key?: "users" | "teachers") {
     if (!key) return ["Missing key"];
 
     const file = this.#getFile();
@@ -104,7 +109,7 @@ export class LocalRepository implements IRepository {
     return [null, foundEntity];
   }
 
-  deleteById(id: number, entityKey?: string) {
+  deleteById(id: number, entityKey?: "users" | "teachers") {
     if (!entityKey) return ["Missing key"];
 
     const file = this.#getFile();
@@ -124,7 +129,7 @@ export class LocalRepository implements IRepository {
     return [null, true];
   }
 
-  updateById(id: number, data: object, entityKey?: string) {
+  updateById(id: number, data: object, entityKey?: "users" | "teachers") {
     if (!entityKey) return ["Missing key"];
 
     const file = this.#getFile();
@@ -137,17 +142,17 @@ export class LocalRepository implements IRepository {
 
     if (!foundEntity) return ["Entity not found"];
 
-    file[entityKey] = this.#updateUser(file, entityKey, data, id);
+    file[entityKey] = this.#updateEntity(file, entityKey, data, id);
 
     fs.writeFileSync(dbPath, JSON.stringify(file));
 
     return [null, data];
   }
 
-  #updateUser(file: any, entityKey: string, data: object, userId: number) {
+  #updateEntity(file: any, entityKey: string, data: object, entityId: number) {
     return file[entityKey].map((entity: any) => {
-      if (entity.id === userId) {
-        entity = { ...data, id: userId };
+      if (entity.id === entityId) {
+        entity = { ...data, id: entityId };
       }
 
       return entity;
@@ -163,7 +168,7 @@ export class LocalRepository implements IRepository {
     return entities[lastIndex].id + 1;
   }
 
-  create(data: any, key?: string, uniqueKey?: string) {
+  create(data: any, key?: "users" | "teachers", uniqueKey?: string) {
     if (!key) return { error: "Missing key" };
 
     const file = this.#getFile();

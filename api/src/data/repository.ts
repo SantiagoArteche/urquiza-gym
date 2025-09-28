@@ -1,14 +1,20 @@
+type entity = "users" | "teachers";
+
 export interface IRepository {
   getAll: (
-    entityKey: string,
+    entityKey: entity,
     key: string,
     search?: string,
     limit?: number,
     offset?: number
   ) => any;
-  getById: (id: number, key?: string) => any;
-  getByCountryId: (countryId: string, key?: string) => any;
-  deleteById: (id: number, key?: string) => any;
-  create: (data: any, key?: string, uniqueKey?: string) => any;
-  updateById: (id: number, data: object, key?: string) => any;
+  getById: (id: number, entityKey?: entity) => any;
+  getByCountryId: (countryId: string, entityKey?: entity) => any;
+  deleteById: (id: number, entityKey?: entity) => any;
+  create: (data: any, entityKey?: entity, uniqueKey?: string) => any;
+  updateById: (
+    id: number,
+    data: object,
+    entityKey?: "users" | "teachers"
+  ) => any;
 }
