@@ -10,7 +10,7 @@ export default function HomeView({
   handleLogout,
 }: HomeViewProps) {
   return (
-    <div className="min-h-screen py-8 text-white bg-gray-800 flex items-center justify-center bg-gradient-to-br from-gym-dark via-gym-gray to-gym-light-gray text-gym-text font-sans">
+    <div className="min-h-screen py-8 text-white bg-gray-950 flex items-center justify-center bg-gradient-to-br from-gym-dark via-gym-gray to-gym-light-gray text-gym-text font-sans">
       <div className="max-w-xl w-full mx-auto">
         <div className="bg-gradient-to-br from-gym-gray via-gym-dark to-gym-light-gray rounded-xl shadow-2xl p-10 border border-gym-light-gray">
           {!client ? (
