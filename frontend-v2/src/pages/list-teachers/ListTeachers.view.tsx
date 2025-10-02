@@ -6,9 +6,116 @@ export const ListTeachersView = ({
   search,
   setSearch,
   columns,
-  fetchTeachers,
   navigate,
+  pendingDeleteId,
+  deleting,
+  requestDelete,
+  cancelDelete,
+  confirmDelete,
 }: ListTeachersViewType) => {
+  const renderRows = () => {
+    if (loading) {
+      return (
+        <tr>
+          <td
+            colSpan={columns.length + 1}
+            className="text-center py-8 text-gray-400"
+          >
+            Cargando...
+          </td>
+        </tr>
+      );
+    }
+    if (teachers.length === 0) {
+      return (
+        <tr>
+          <td colSpan={columns.length + 1} className="text-center py-12">
+            <svg
+              className="mx-auto h-12 w-12 text-gray-500 mb-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+              />
+            </svg>
+            <h3 className="text-lg font-medium text-gray-300 mb-2">
+              No hay profesores registrados
+            </h3>
+            <p className="text-gray-500">
+              Comienza agregando tu primer profesor.
+            </p>
+          </td>
+        </tr>
+      );
+    }
+    return teachers.map((teacher) => (
+      <tr
+        key={teacher.id}
+        className="hover:bg-gray-800 transition-colors duration-150"
+      >
+        {columns.map((col) => (
+          <td
+            key={col.key}
+            className="px-6 py-4 whitespace-nowrap text-sm text-gray-300"
+          >
+            {Array.isArray(teacher[col.key as keyof typeof teacher])
+              ? (
+                  teacher[
+                    col.key as keyof typeof teacher
+                  ] as unknown as string[]
+                ).join(", ")
+              : (teacher[col.key as keyof typeof teacher] as string) || ""}
+          </td>
+        ))}
+        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+          <button
+            className="text-blue-400 hover:text-orange-500 transition-colors duration-200 cursor-pointer"
+            onClick={() => navigate(`/edit-teacher/${teacher.id}`)}
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              />
+            </svg>
+          </button>
+          <button
+            className="text-red-400 hover:text-red-300 transition-colors duration-200 cursor-pointer"
+            onClick={() =>
+              teacher.id != null && requestDelete(String(teacher.id))
+            }
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+          </button>
+        </td>
+      </tr>
+    ));
+  };
+
   return (
     <div className="min-h-screen bg-gray-950 text-white font-sans">
       <main className="w-full max-w-7xl mx-auto py-8 min-h-screen bg-gray-950 text-white">
@@ -34,7 +141,7 @@ export const ListTeachersView = ({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Buscar profesor por nombre, apellido o DNI..."
-              className="w-full pl-10 pr-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+              className="w-full pl-10 pr-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duración-200"
             />
           </div>
         </div>
@@ -56,121 +163,40 @@ export const ListTeachersView = ({
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-700">
-                {loading ? (
-                  <tr>
-                    <td
-                      colSpan={columns.length + 1}
-                      className="text-center py-8 text-gray-400"
-                    >
-                      Cargando...
-                    </td>
-                  </tr>
-                ) : teachers.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan={columns.length + 1}
-                      className="text-center py-12"
-                    >
-                      <svg
-                        className="mx-auto h-12 w-12 text-gray-500 mb-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                        />
-                      </svg>
-                      <h3 className="text-lg font-medium text-gray-300 mb-2">
-                        No hay profesores registrados
-                      </h3>
-                      <p className="text-gray-500">
-                        Comienza agregando tu primer profesor.
-                      </p>
-                    </td>
-                  </tr>
-                ) : (
-                  teachers.map((teacher) => (
-                    <tr
-                      key={teacher.id}
-                      className="hover:bg-gray-800 transition-colors duration-150"
-                    >
-                      {columns.map((col) => (
-                        <td
-                          key={col.key}
-                          className="px-6 py-4 whitespace-nowrap text-sm text-gray-300"
-                        >
-                          {Array.isArray(
-                            teacher[col.key as keyof typeof teacher]
-                          )
-                            ? (
-                                teacher[
-                                  col.key as keyof typeof teacher
-                                ] as unknown as string[]
-                              ).join(", ")
-                            : (teacher[
-                                col.key as keyof typeof teacher
-                              ] as string) || ""}
-                        </td>
-                      ))}
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                        <button
-                          className="text-blue-400 hover:text-orange-500 transition-colors duration-200"
-                          onClick={() =>
-                            navigate(`/edit-teacher/${teacher.id}`)
-                          }
-                        >
-                          <svg
-                            className="w-5 h-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                            />
-                          </svg>
-                        </button>
-                        <button
-                          className="text-red-400 hover:text-red-300 transition-colors duration-200"
-                          onClick={async () => {
-                            await fetch(
-                              `http://localhost:7000/api/teachers/${teacher.id}`,
-                              { method: "DELETE" }
-                            );
-                            fetchTeachers();
-                          }}
-                        >
-                          <svg
-                            className="w-5 h-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                            />
-                          </svg>
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
+              <tbody className="divide-y divide-gray-700">{renderRows()}</tbody>
             </table>
           </div>
         </div>
       </main>
+      {pendingDeleteId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-gray-900 border border-gray-700 rounded-xl shadow-2xl w-full max-w-sm p-6 relative">
+            <h2 className="text-lg font-semibold mb-2 text-white">
+              Confirmar eliminación
+            </h2>
+            <p className="text-sm text-gray-400 mb-6">
+              Esta acción eliminará el profesor de forma permanente. ¿Deseás
+              continuar?
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={cancelDelete}
+                disabled={deleting}
+                className="px-4 py-2 rounded-lg border border-gray-600 text-gray-300 hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={confirmDelete}
+                disabled={deleting}
+                className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+              >
+                {deleting ? "Eliminando..." : "Eliminar"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

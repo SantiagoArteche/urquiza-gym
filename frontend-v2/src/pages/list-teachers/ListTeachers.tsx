@@ -16,6 +16,8 @@ export default function ListTeachers() {
   const [teachers, setTeachers] = useState<TeacherType[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
   const navigate = useNavigate();
 
   const fetchTeachers = useCallback(
@@ -53,6 +55,27 @@ export default function ListTeachers() {
     fetchTeachers(search);
   }, [search, fetchTeachers]);
 
+  const requestDelete = (id: string) => setPendingDeleteId(id);
+  const cancelDelete = () => {
+    if (deleting) return;
+    setPendingDeleteId(null);
+  };
+  const confirmDelete = async () => {
+    if (!pendingDeleteId) return;
+    setDeleting(true);
+    try {
+      await fetch(`http://localhost:7000/api/teachers/${pendingDeleteId}`, {
+        method: "DELETE",
+      });
+      fetchTeachers(search);
+    } catch (e) {
+      console.error("Error eliminando profesor", e);
+    } finally {
+      setDeleting(false);
+      setPendingDeleteId(null);
+    }
+  };
+
   return (
     <ListTeachersView
       teachers={teachers}
@@ -62,6 +85,11 @@ export default function ListTeachers() {
       columns={columns}
       fetchTeachers={() => fetchTeachers(search)}
       navigate={navigate}
+      pendingDeleteId={pendingDeleteId}
+      deleting={deleting}
+      requestDelete={requestDelete}
+      cancelDelete={cancelDelete}
+      confirmDelete={confirmDelete}
     />
   );
 }
