@@ -36,6 +36,11 @@ export type ListUsersViewType = {
   columns: Column[];
   fetchUsers: () => void;
   navigate: (path: string) => void;
+  pendingDeleteId: string | null;
+  deleting: boolean;
+  requestDelete: (id: string) => void;
+  cancelDelete: () => void;
+  confirmDelete: () => void;
 };
 
 export interface EditUserViewProps {

@@ -47,4 +47,9 @@ export type ListTeachersViewType = {
   columns: { key: string; label: string }[];
   fetchTeachers: () => void;
   navigate: (path: string) => void;
+  pendingDeleteId: string | null;
+  deleting: boolean;
+  requestDelete: (id: string) => void;
+  cancelDelete: () => void;
+  confirmDelete: () => void;
 };
