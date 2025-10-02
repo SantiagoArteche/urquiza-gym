@@ -2,7 +2,7 @@ import Home from "./pages/home/Home";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 import CreateUser from "./pages/create-user/CreateUser";
 import Header from "./layout/Header";
-import ListUsers from "./pages/list/ListUsers";
+import ListUsers from "./pages/list-users/ListUsers";
 import EditUser from "./pages/edit-user/EditUser";
 import CreateTeacher from "./pages/create-teacher/CreateTeacher";
 import EditTeacher from "./pages/edit-teacher/EditTeacher";
