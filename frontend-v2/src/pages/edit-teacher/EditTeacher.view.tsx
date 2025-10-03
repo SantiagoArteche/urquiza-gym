@@ -117,7 +117,10 @@ export const EditTeacherView = ({
               )}
             </div>
             <div className="space-y-2 md:col-span-2">
-              <label className="block text-sm font-semibold text-gray-200">
+              <label
+                htmlFor="assignedClasses"
+                className="block text-sm font-semibold text-gray-200"
+              >
                 Clases asignadas
               </label>
               <div className="flex flex-wrap gap-2">

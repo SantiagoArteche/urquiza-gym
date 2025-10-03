@@ -8,7 +8,7 @@ export default function HomeView({
   error,
   client,
   handleLogout,
-}: HomeViewProps) {
+}: Readonly<HomeViewProps>) {
   return (
     <div className="min-h-screen py-8 text-white bg-gray-950 flex items-center justify-center  font-sans">
       <div className="max-w-xl w-full mx-auto">

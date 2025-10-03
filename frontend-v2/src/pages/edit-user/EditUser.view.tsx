@@ -7,7 +7,7 @@ export default function EditUserView({
   isSubmitting,
   error,
   navigate,
-}: EditUserViewProps) {
+}: Readonly<EditUserViewProps>) {
   return (
     <div className="min-h-screen bg-gray-950 text-white font-sans py-8">
       <div className="max-w-xl mx-auto py-8  bg-gray-900 rounded-xl shadow-lg">
@@ -19,7 +19,10 @@ export default function EditUserView({
           className="space-y-4 bg-gray-800 p-6 rounded shadow"
         >
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-200">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium mb-1 text-gray-200"
+            >
               Nombre
             </label>
             <input
@@ -31,7 +34,10 @@ export default function EditUserView({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-200">
+            <label
+              htmlFor="lastName"
+              className="block text-sm font-medium mb-1 text-gray-200"
+            >
               Apellido
             </label>
             <input
@@ -43,7 +49,10 @@ export default function EditUserView({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-200">
+            <label
+              htmlFor="countryId"
+              className="block text-sm font-medium mb-1 text-gray-200"
+            >
               País
             </label>
             <input
@@ -54,7 +63,10 @@ export default function EditUserView({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-200">
+            <label
+              htmlFor="phone"
+              className="block text-sm font-medium mb-1 text-gray-200"
+            >
               Teléfono
             </label>
             <input
@@ -65,7 +77,10 @@ export default function EditUserView({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-200">
+            <label
+              htmlFor="emergencyPhone"
+              className="block text-sm font-medium mb-1 text-gray-200"
+            >
               Teléfono de emergencia
             </label>
             <input
@@ -76,7 +91,10 @@ export default function EditUserView({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-200">
+            <label
+              htmlFor="expirement"
+              className="block text-sm font-medium mb-1 text-gray-200"
+            >
               Vencimiento
             </label>
             <input
@@ -87,7 +105,10 @@ export default function EditUserView({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-200">
+            <label
+              htmlFor="debtType"
+              className="block text-sm font-medium mb-1 text-gray-200"
+            >
               Tipo de deuda
             </label>
             <input
