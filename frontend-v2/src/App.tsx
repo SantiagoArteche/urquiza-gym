@@ -7,6 +7,7 @@ import EditUser from "./pages/edit-user/EditUser";
 import CreateTeacher from "./pages/create-teacher/CreateTeacher";
 import EditTeacher from "./pages/edit-teacher/EditTeacher";
 import ListTeachers from "./pages/list-teachers/ListTeachers";
+import Schedule from "./pages/schedule/Schedule";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/create-teacher" element={<CreateTeacher />} />
           <Route path="/edit-teacher/:id" element={<EditTeacher />} />
           <Route path="/list-teachers" element={<ListTeachers />} />
+          <Route path="/schedule" element={<Schedule />} />
         </Route>
       </Routes>
     </BrowserRouter>
