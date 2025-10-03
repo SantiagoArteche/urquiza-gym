@@ -53,6 +53,7 @@ export const ListUsersView = ({
         </tr>
       );
     }
+
     return users.map((user) => (
       <tr
         key={user.id}

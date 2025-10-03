@@ -53,6 +53,7 @@ export const ListTeachersView = ({
         </tr>
       );
     }
+
     return teachers.map((teacher) => (
       <tr
         key={teacher.id}

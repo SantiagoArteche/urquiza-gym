@@ -36,42 +36,43 @@ export default function EditTeacher() {
       .then((data) => setInitialValues(data));
   }, [id]);
 
-  const formik = useFormik({
-    enableReinitialize: true,
-    initialValues: initialValues || {
-      name: "",
-      lastName: "",
-      phone: "",
-      countryId: "",
-      emergencyPhone: "",
-      assignedClasses: [],
-    },
-    validationSchema,
-    onSubmit: async (values) => {
-      try {
-        await fetch(`http://localhost:7000/api/teachers/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(values),
-        });
-        setShowSuccess(true);
-        setTimeout(() => navigate("/list-teachers"), 1500);
-      } catch {
-        setErrorMessage("Error al editar el profesor. Intente nuevamente.");
-        setShowError(true);
-        setTimeout(() => setShowError(false), 5000);
-      }
-    },
-  });
+  const { errors, values, touched, handleChange, handleSubmit, isSubmitting } =
+    useFormik({
+      enableReinitialize: true,
+      initialValues: initialValues ?? {
+        name: "",
+        lastName: "",
+        phone: "",
+        countryId: "",
+        emergencyPhone: "",
+        assignedClasses: [],
+      },
+      validationSchema,
+      onSubmit: async (values) => {
+        try {
+          await fetch(`http://localhost:7000/api/teachers/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(values),
+          });
+          setShowSuccess(true);
+          setTimeout(() => navigate("/list-teachers"), 1500);
+        } catch {
+          setErrorMessage("Error al editar el profesor. Intente nuevamente.");
+          setShowError(true);
+          setTimeout(() => setShowError(false), 5000);
+        }
+      },
+    });
 
   return initialValues ? (
     <EditTeacherView
-      values={formik.values}
-      errors={formik.errors}
-      touched={formik.touched}
-      handleChange={formik.handleChange}
-      handleSubmit={formik.handleSubmit}
-      isSubmitting={formik.isSubmitting}
+      values={values}
+      errors={errors}
+      touched={touched}
+      handleChange={handleChange}
+      handleSubmit={handleSubmit}
+      isSubmitting={isSubmitting}
       showSuccess={showSuccess}
       showError={showError}
       errorMessage={errorMessage}

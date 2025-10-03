@@ -1,5 +1,17 @@
 import { Outlet, Link } from "react-router-dom";
 
+const navItems = [
+  {
+    to: "/",
+    label: "Home",
+    variant: "bg-orange-500 hover:bg-orange-600",
+  },
+  { to: "/create-user", label: "Alta Alumno" },
+  { to: "/list-users", label: "Listado Alumnos" },
+  { to: "/create-teacher", label: "Alta Profesor" },
+  { to: "/list-teachers", label: "Listado Profesores" },
+];
+
 const Header = () => {
   return (
     <>
@@ -9,36 +21,16 @@ const Header = () => {
             Gestión de Alumnos - Gimnasio
           </h1>
           <nav className="flex justify-center gap-4">
-            <Link
-              to="/"
-              className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-            >
-              Home
-            </Link>
-            <Link
-              to="/create-user"
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-            >
-              Alta Alumno
-            </Link>
-            <Link
-              to="/list-users"
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-            >
-              Listado Alumnos
-            </Link>
-            <Link
-              to="/create-teacher"
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-            >
-              Alta Profesor
-            </Link>
-            <Link
-              to="/list-teachers"
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-            >
-              Listado Profesores
-            </Link>
+            {navItems.map(({ to, label, variant }) => {
+              const base =
+                "text-white px-4 py-2 rounded-lg font-semibold transition-colors";
+              const color = variant || "bg-blue-500 hover:bg-blue-600";
+              return (
+                <Link key={to} to={to} className={`${color} ${base}`}>
+                  {label}
+                </Link>
+              );
+            })}
           </nav>
         </div>
       </header>
