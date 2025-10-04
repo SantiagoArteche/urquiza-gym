@@ -248,7 +248,7 @@ export const CreateUserView = ({
                   </button>
                   <button
                     className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg transition-colors font-medium text-center"
-                    onClick={() => navigate("/list")}
+                    onClick={() => navigate("/list-users")}
                   >
                     Ver Listado
                   </button>

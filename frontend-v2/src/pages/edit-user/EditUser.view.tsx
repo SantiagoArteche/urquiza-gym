@@ -123,7 +123,7 @@ export default function EditUserView({
             <button
               type="button"
               className="bg-red-500 px-4 py-2 rounded hover:bg-gray-300"
-              onClick={() => navigate("/list")}
+              onClick={() => navigate("/list-users")}
             >
               Cancelar
             </button>

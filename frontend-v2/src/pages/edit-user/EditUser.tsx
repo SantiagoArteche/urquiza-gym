@@ -36,7 +36,7 @@ export default function EditUser() {
           );
           const result = await response.json();
           if (response.ok) {
-            navigate("/list");
+            navigate("/list-users");
           } else {
             setError(result.message || "Error desconocido");
           }
