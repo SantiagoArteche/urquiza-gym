@@ -127,15 +127,6 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({
                           </div>
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1 justify-end text-[10px]">
                             <button
-                              className="bg-blue-600 hover:bg-blue-700 px-1 rounded"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onEditEntry(entry.id);
-                              }}
-                            >
-                              Editar
-                            </button>
-                            <button
                               className="bg-red-600 hover:bg-red-700 px-1 rounded"
                               onClick={(e) => {
                                 e.stopPropagation();
