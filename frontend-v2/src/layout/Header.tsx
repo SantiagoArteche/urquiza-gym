@@ -10,7 +10,7 @@ const navItems = [
   { to: "/list-users", label: "Listado Alumnos" },
   { to: "/create-teacher", label: "Alta Profesor" },
   { to: "/list-teachers", label: "Listado Profesores" },
-  { to: "/schedule", label: "Horario" },
+  { to: "/schedule", label: "Horarios" },
 ];
 
 const Header = () => {
