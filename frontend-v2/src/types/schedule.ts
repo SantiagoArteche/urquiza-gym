@@ -1,4 +1,3 @@
-// Schedule related types
 export type DayOfWeek =
   | "monday"
   | "tuesday"
