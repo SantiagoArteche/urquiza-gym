@@ -14,7 +14,7 @@ export type ClassType =
   | "mixta";
 
 export interface ScheduleEntry {
-  id: string;
+  id: string | number;
   day: DayOfWeek;
   time: string;
   classType: ClassType;

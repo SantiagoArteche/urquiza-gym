@@ -83,10 +83,10 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({
                       {entry ? (
                         <div className="p-1 h-full flex flex-col justify-between">
                           <div className="flex flex-col items-center">
-                            <p className="text-xs font-bold text-orange-400 truncate uppercase">
+                            <p className="text-md font-bold text-orange-400 truncate uppercase">
                               {entry.classType}
                             </p>
-                            <p className="text-[10px] text-gray-300 truncate uppercase">
+                            <p className="text-xs text-gray-300 truncate uppercase">
                               {getFullName(teacher as TeacherType | undefined)}
                             </p>
                           </div>
