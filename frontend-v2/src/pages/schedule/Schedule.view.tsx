@@ -1,6 +1,5 @@
 import React from "react";
-import { useFormik } from "formik";
-import type { ScheduleEntry, DayOfWeek, ClassType } from "../../types";
+import type { ScheduleEntry, DayOfWeek, TeacherType } from "../../types";
 import {
   CLASS_TYPE_OPTIONS,
   DAYS_LABEL,
@@ -8,7 +7,6 @@ import {
 } from "../../types";
 
 export interface ScheduleViewProps {
-  entries: ScheduleEntry[];
   teachers: { id?: number; name: string; lastName: string }[];
   onSelectSlot: (day: DayOfWeek, time: string) => void;
   onEditEntry: (id: string) => void;
@@ -16,17 +14,16 @@ export interface ScheduleViewProps {
   selectedSlot?: { day: DayOfWeek; time: string } | null;
   editingEntry?: ScheduleEntry | null;
   onCancelEdit: () => void;
-  onSave: (data: {
-    id?: string;
-    day: DayOfWeek;
-    time: string;
-    classType: ClassType;
-    teacherId: string | number | null;
-  }) => void;
+  currentDayLabel: string;
+  currentTimeValue: string;
+  values: { classType: string; teacherId: string };
+  handleChange: React.ChangeEventHandler<HTMLSelectElement>;
+  handleSubmit: React.FormEventHandler<HTMLFormElement>;
+  getFullName: (t: TeacherType | undefined) => string;
+  getEntry: (day: DayOfWeek, time: string) => ScheduleEntry | undefined;
 }
 
 const ScheduleView: React.FC<ScheduleViewProps> = ({
-  entries,
   teachers,
   onSelectSlot,
   onEditEntry,
@@ -34,47 +31,14 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({
   selectedSlot,
   editingEntry,
   onCancelEdit,
-  onSave,
+  currentDayLabel,
+  currentTimeValue,
+  values,
+  handleChange,
+  handleSubmit,
+  getFullName,
+  getEntry,
 }) => {
-  const getEntry = (day: DayOfWeek, time: string) =>
-    entries.find((e) => e.day === day && e.time === time);
-
-  let currentDayLabel = "";
-  if (editingEntry) {
-    currentDayLabel = DAYS_LABEL[editingEntry.day];
-  } else if (selectedSlot) {
-    currentDayLabel = DAYS_LABEL[selectedSlot.day];
-  }
-
-  let currentTimeValue = "";
-  if (editingEntry) {
-    currentTimeValue = editingEntry.time;
-  } else if (selectedSlot) {
-    currentTimeValue = selectedSlot.time;
-  }
-
-  const { values, handleChange, handleSubmit } = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      classType:
-        editingEntry?.classType || (selectedSlot ? CLASS_TYPE_OPTIONS[0] : ""),
-      teacherId: editingEntry?.teacherId ? String(editingEntry.teacherId) : "",
-    },
-    onSubmit: (values) => {
-      if (!values.classType) return;
-      const slot = editingEntry
-        ? { day: editingEntry.day, time: editingEntry.time }
-        : selectedSlot!;
-      onSave({
-        id: editingEntry?.id,
-        day: slot.day,
-        time: slot.time,
-        classType: values.classType as ClassType,
-        teacherId: values.teacherId || null,
-      });
-    },
-  });
-
   return (
     <div className="p-4 mx-auto min-h-screen bg-gray-950">
       <h2 className="text-3xl font-bold mb-6 text-white">Horario Semanal</h2>
@@ -103,6 +67,9 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({
                 </td>
                 {Object.keys(DAYS_LABEL).map((day) => {
                   const entry = getEntry(day as DayOfWeek, time);
+                  const teacher = teachers.find(
+                    (t) => String(t.id) === String(entry?.teacherId)
+                  );
                   return (
                     <td
                       key={day}
@@ -115,19 +82,17 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({
                     >
                       {entry ? (
                         <div className="p-1 h-full flex flex-col justify-between">
-                          <div>
-                            <p className="text-xs font-bold text-orange-400 truncate">
+                          <div className="flex flex-col items-center">
+                            <p className="text-xs font-bold text-orange-400 truncate uppercase">
                               {entry.classType}
                             </p>
-                            <p className="text-[10px] text-gray-300 truncate">
-                              {teachers.find(
-                                (t) => String(t.id) === String(entry.teacherId)
-                              )?.name || "-"}
+                            <p className="text-[10px] text-gray-300 truncate uppercase">
+                              {getFullName(teacher as TeacherType | undefined)}
                             </p>
                           </div>
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1 justify-end text-[10px]">
                             <button
-                              className="bg-red-600 hover:bg-red-700 px-1 rounded"
+                              className="bg-red-600 hover:bg-red-700 px-1 rounded cursor-pointer"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 onRemoveEntry(entry.id);
@@ -206,13 +171,13 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({
                   name="classType"
                   value={values.classType}
                   onChange={handleChange}
-                  className="w-full bg-gray-800 border border-gray-700 rounded px-2 py-2 text-sm"
+                  className="w-full bg-gray-800 border border-gray-700 rounded px-2 py-2 text-sm capitalize"
                 >
                   <option value="" disabled>
                     Seleccionar tipo
                   </option>
                   {CLASS_TYPE_OPTIONS.map((c) => (
-                    <option key={c} value={c}>
+                    <option key={c} value={c} className="capitalize">
                       {c}
                     </option>
                   ))}
