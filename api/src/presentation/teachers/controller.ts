@@ -16,14 +16,14 @@ export class TeacherController {
       return res.status(400).json({ message: "The id must be a number" });
 
     const [error, foundTeacher] = this.service.getTeacherById(+id);
-    if (error) return res.json({ message: error });
+    if (error) return res.status(error.code).json({ message: error.message });
     return res.json(foundTeacher);
   };
 
   getTeacherByCountryId = (req: Request, res: Response) => {
     const { countryId } = req.params;
     const [error, foundTeacher] = this.service.getTeacherByCountryId(countryId);
-    if (error) return res.json({ message: error });
+    if (error) return res.status(error.code).json({ message: error.message });
     return res.json(foundTeacher);
   };
 
@@ -46,13 +46,13 @@ export class TeacherController {
       assignedClasses,
     };
 
-    const newTeacher = await this.service.createTeacher(data);
+    const [error, newTeacher] = await this.service.createTeacher(data);
 
-    if ((newTeacher as any).error) {
-      return res.status(400).json({
+    if (error) {
+      return res.status(error.code).json({
         success: false,
-        error: (newTeacher as any).error,
-        uniqueKey: (newTeacher as any).uniqueKey,
+        error: error.message,
+        uniqueKey: error.uniqueKey,
       });
     }
 
@@ -83,7 +83,7 @@ export class TeacherController {
       return res.status(400).json({ message: "The id must be a number" });
 
     const [error, updatedTeacher] = this.service.updateTeacherById(+id, data);
-    if (error) return res.json({ message: error });
+    if (error) return res.status(error.code).json({ message: error.message });
     return res.json(updatedTeacher);
   };
 
@@ -93,7 +93,7 @@ export class TeacherController {
       return res.status(400).json({ message: "The id must be a number" });
 
     const [error] = this.service.deleteTeacher(+id);
-    if (error) return res.json({ message: error });
+    if (error) return res.status(error.code).json({ message: error.message });
     return res.json({ message: `The teacher with the id ${id} was deleted` });
   };
 }
