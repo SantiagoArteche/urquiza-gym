@@ -20,7 +20,7 @@ export class UserController {
 
     const [error, foundUser] = this.service.getUserById(+id);
 
-    if (error) return res.json({ message: error });
+    if (error) return res.status(error.code).json({ message: error.message });
 
     return res.json(foundUser);
   };
@@ -30,7 +30,7 @@ export class UserController {
 
     const [error, foundUser] = this.service.getUserByCountryId(countryId);
 
-    if (error) return res.json({ message: error });
+    if (error) return res.status(error.code).json({ message: error.message });
 
     return res.json(foundUser);
   };
@@ -56,13 +56,13 @@ export class UserController {
       debtType,
     };
 
-    const newUser = await this.service.createUser(data);
+    const [error, newUser] = await this.service.createUser(data);
 
-    if (newUser.error) {
-      return res.status(400).json({
+    if (error) {
+      return res.status(error.code).json({
         success: false,
-        error: newUser.error,
-        uniqueKey: newUser.uniqueKey,
+        error: error.message,
+        uniqueKey: error.uniqueKey,
       });
     }
 
@@ -96,7 +96,7 @@ export class UserController {
 
     const [error, updatedUser] = this.service.updateUserById(+id, data);
 
-    if (error) return res.json({ message: error });
+    if (error) return res.status(error.code).json({ message: error.message });
 
     return res.json(updatedUser);
   };
@@ -109,7 +109,7 @@ export class UserController {
 
     const [error] = this.service.deleteUser(+id);
 
-    if (error) return res.json({ message: error });
+    if (error) return res.status(error.code).json({ message: error.message });
 
     return res.json({ message: `The user with the id ${id} was deleted` });
   };
