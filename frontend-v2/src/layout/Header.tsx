@@ -19,7 +19,7 @@ const Header = () => {
       <header className="bg-gray-900 border-b border-gray-800 shadow-l">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <h1 className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-orange-500 to-blue-500 bg-clip-text text-transparent mb-6">
-            Gestión de Alumnos - Gimnasio
+            Fitness Del Sur
           </h1>
           <nav className="flex justify-center gap-4 flex-wrap">
             {navItems.map(({ to, label, variant }) => {
