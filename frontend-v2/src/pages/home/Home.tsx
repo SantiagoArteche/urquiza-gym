@@ -26,7 +26,11 @@ export default function Home() {
           if (response.ok && data.id) {
             setClient(data);
           } else {
-            setError("DNI no encontrado. Verifica el número ingresado.");
+            if (data.message === "User not found") {
+              setError("DNI no encontrado. Verifica el número ingresado.");
+            } else {
+              setError("Error inesperado. Intenta nuevamente.");
+            }
           }
         } catch {
           setLoading(false);
