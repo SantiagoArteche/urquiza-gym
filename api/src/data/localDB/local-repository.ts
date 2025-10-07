@@ -1,5 +1,7 @@
 import fs from "fs";
 import type { IRepository } from "../repository";
+
+type EntityKey = "users" | "teachers" | "schedule";
 import path from "path";
 
 const dbPath = path.join(__dirname, "database.json");
@@ -11,7 +13,7 @@ export class LocalRepository implements IRepository {
   }
 
   getAll(
-    entityKey: "users" | "teachers",
+    entityKey: EntityKey,
     key: string,
     search?: string,
     limit?: number,
@@ -75,52 +77,58 @@ export class LocalRepository implements IRepository {
     );
   }
 
-  getById(id: number, entityKey?: "users" | "teachers") {
-    if (!entityKey) return ["Missing key"];
+  getById(id: number, entityKey?: EntityKey) {
+    if (!entityKey) return [{ message: "Missing key", code: 400 }];
 
     const file = this.#getFile();
 
     const entities = file[entityKey];
 
-    if (!entities.length) return ["The searched property must be an array"];
+    if (!entities.length)
+      return [{ message: "The searched property must be an array", code: 400 }];
 
     const foundEntity = entities.find((entity: any) => entity.id === id);
 
-    if (!foundEntity) return ["User not found"];
+    if (!foundEntity) return [{ message: "Entity not found", code: 404 }];
 
     return [null, foundEntity];
   }
 
-  getByCountryId(countryId: string, key?: "users" | "teachers") {
-    if (!key) return ["Missing key"];
+  getByCountryId(countryId: string, key?: EntityKey) {
+    if (!key) return [{ message: "Missing key", code: 400 }];
+    if (key === "schedule")
+      return [{ message: "Unsupported search for schedule", code: 400 }];
 
     const file = this.#getFile();
 
     const entities = file[key];
 
-    if (!entities.length) return ["The searched property must be an array"];
+    if (!entities.length)
+      return [{ message: "The searched property must be an array", code: 400 }];
 
     const foundEntity = entities.find(
       (entity: any) => entity.countryId === countryId
     );
 
-    if (!foundEntity) return ["User not found"];
+    if (!foundEntity) return [{ message: "User not found", code: 404 }];
 
     return [null, foundEntity];
   }
 
-  deleteById(id: number, entityKey?: "users" | "teachers") {
-    if (!entityKey) return ["Missing key"];
+  deleteById(id: number, entityKey?: EntityKey) {
+    if (!entityKey) return [{ message: "Missing key", code: 400 }];
 
     const file = this.#getFile();
 
     const entities = file[entityKey];
 
-    if (!entities.length) return ["The searched property must be an array"];
+    if (!entities.length)
+      return [{ message: "The searched property must be an array", code: 400 }];
 
     const newEntities = entities.filter((entity: any) => entity.id !== id);
 
-    if (newEntities.length === entities.length) return ["Entity not found"];
+    if (newEntities.length === entities.length)
+      return [{ message: "Entity not found", code: 404 }];
 
     file[entityKey] = newEntities;
 
@@ -129,18 +137,19 @@ export class LocalRepository implements IRepository {
     return [null, true];
   }
 
-  updateById(id: number, data: object, entityKey?: "users" | "teachers") {
+  updateById(id: number, data: object, entityKey?: EntityKey) {
     if (!entityKey) return ["Missing key"];
 
     const file = this.#getFile();
 
     const entities = file[entityKey];
 
-    if (!entities.length) return ["The searched property must be an array"];
+    if (!entities.length)
+      return [{ message: "The searched property must be an array", code: 400 }];
 
     const foundEntity = entities.find((entity: any) => entity.id === id);
 
-    if (!foundEntity) return ["Entity not found"];
+    if (!foundEntity) return [{ message: "Entity not found", code: 404 }];
 
     file[entityKey] = this.#updateEntity(file, entityKey, data, id);
 
@@ -168,7 +177,7 @@ export class LocalRepository implements IRepository {
     return entities[lastIndex].id + 1;
   }
 
-  create(data: any, key?: "users" | "teachers", uniqueKey?: string) {
+  create(data: any, key?: EntityKey, uniqueKey?: string) {
     if (!key) return { error: "Missing key" };
 
     const file = this.#getFile();
@@ -176,7 +185,7 @@ export class LocalRepository implements IRepository {
     const entities = file[key];
 
     if (!Array.isArray(entities))
-      return { error: "The searched property must be an array" };
+      return [{ message: "The searched property must be an array", code: 400 }];
 
     const id = this.buildId(entities);
 
@@ -188,10 +197,13 @@ export class LocalRepository implements IRepository {
       );
 
       if (hasRepeatedCountryId) {
-        return {
-          error: `Unique key already exists`,
-          uniqueKey: newEntity[uniqueKey],
-        };
+        return [
+          {
+            message: "Unique key already exists",
+            uniqueKey: newEntity[uniqueKey],
+            code: 409,
+          },
+        ];
       }
     }
 
@@ -199,6 +211,6 @@ export class LocalRepository implements IRepository {
 
     fs.writeFileSync(dbPath, JSON.stringify(file));
 
-    return newEntity;
+    return [null, newEntity];
   }
 }
