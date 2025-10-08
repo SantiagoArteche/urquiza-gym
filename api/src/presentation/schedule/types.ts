@@ -4,6 +4,7 @@ export interface ScheduleEntry {
   time: string;
   classType: string;
   teacherId: string | number | null;
+  participants: string[];
 }
 
 export interface CreateScheduleEntryDTO {

@@ -13,6 +13,7 @@ export class ScheduleRoutes {
     router.get("/", controller.getSchedule);
     router.post("/", controller.upsert);
     router.put("/", controller.upsert);
+    router.post("/:id/join", controller.join);
     router.delete("/:id", controller.delete);
 
     return router;
