@@ -59,3 +59,5 @@ export const DEFAULT_TIME_SLOTS: string[] = [
   "20:00",
   "21:00",
 ];
+
+export const MAX_CLASS_PARTICIPANTS = 10;

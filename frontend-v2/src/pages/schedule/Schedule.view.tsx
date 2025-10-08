@@ -4,6 +4,7 @@ import {
   CLASS_TYPE_OPTIONS,
   DAYS_LABEL,
   DEFAULT_TIME_SLOTS,
+  MAX_CLASS_PARTICIPANTS,
 } from "../../types";
 
 export interface ScheduleViewProps {
@@ -70,10 +71,18 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({
                   const teacher = teachers.find(
                     (t) => String(t.id) === String(entry?.teacherId)
                   );
+                  const participantsCount = entry?.participants?.length ?? 0;
+                  const isFull =
+                    participantsCount >= MAX_CLASS_PARTICIPANTS &&
+                    Boolean(entry);
                   return (
                     <td
                       key={day}
-                      className="border border-gray-700 h-16 relative group cursor-pointer hover:bg-gray-800 transition-colors"
+                      className={`border border-gray-700 h-16 relative group cursor-pointer transition-colors ${
+                        isFull
+                          ? "bg-gray-800/60 hover:bg-gray-800/80"
+                          : "hover:bg-gray-800"
+                      }`}
                       onClick={() =>
                         entry
                           ? onEditEntry(entry.id)
@@ -92,8 +101,14 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({
                           </div>
                           <div className="flex items-center justify-between text-[11px] text-gray-300 mt-1">
                             <span className="bg-gray-800/70 border border-gray-700 rounded px-2 py-0.5">
-                              Inscritos: {entry.participants?.length ?? 0}
+                              Inscritos: {participantsCount}/
+                              {MAX_CLASS_PARTICIPANTS}
                             </span>
+                            {isFull && (
+                              <span className="text-red-400 font-semibold">
+                                Cupo completo
+                              </span>
+                            )}
                           </div>
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1 justify-end text-[10px]">
                             <button

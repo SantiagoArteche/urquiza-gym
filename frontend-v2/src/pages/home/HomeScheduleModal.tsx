@@ -1,6 +1,10 @@
 import React from "react";
 import type { User, ScheduleEntry, TeacherType, DayOfWeek } from "../../types";
-import { DAYS_LABEL, DEFAULT_TIME_SLOTS } from "../../types";
+import {
+  DAYS_LABEL,
+  DEFAULT_TIME_SLOTS,
+  MAX_CLASS_PARTICIPANTS,
+} from "../../types";
 
 type HomeScheduleModalProps = {
   open: boolean;
@@ -12,9 +16,13 @@ type HomeScheduleModalProps = {
   onRetry: () => void;
   onJoin: (entryId: number) => Promise<void> | void;
   joiningEntryId: number | null;
+  onLeave: (entryId: number) => Promise<void> | void;
+  leavingEntryId: number | null;
   client: User;
   joinError: string;
   joinSuccess: string;
+  leaveError: string;
+  leaveSuccess: string;
 };
 
 const errorDictionary: Record<string, string> = {
@@ -22,6 +30,8 @@ const errorDictionary: Record<string, string> = {
   "Already joined another class for this day":
     "Solo podés anotarte a una clase por día.",
   "Entry not found": "No se encontró la clase seleccionada.",
+  "Class is full": "La clase alcanzó el cupo máximo de participantes.",
+  "Not joined": "No estás inscripto en esta clase.",
 };
 
 function translateError(message: string) {
@@ -39,9 +49,13 @@ const HomeScheduleModal: React.FC<HomeScheduleModalProps> = ({
   onRetry,
   onJoin,
   joiningEntryId,
+  onLeave,
+  leavingEntryId,
   client,
   joinError,
   joinSuccess,
+  leaveError,
+  leaveSuccess,
 }) => {
   if (!open) return null;
 
@@ -69,7 +83,8 @@ const HomeScheduleModal: React.FC<HomeScheduleModalProps> = ({
             <h3 className="text-2xl font-semibold">Horario de clases</h3>
             <p className="text-sm text-gray-400">
               Seleccioná una clase para anotarte. Recordá que solo podés
-              inscribirte a una por día.
+              inscribirte a una por día y cada clase tiene un cupo máximo de{" "}
+              {MAX_CLASS_PARTICIPANTS} personas.
             </p>
           </div>
           <button
@@ -104,9 +119,19 @@ const HomeScheduleModal: React.FC<HomeScheduleModalProps> = ({
                   {translateError(joinError)}
                 </div>
               )}
+              {leaveError && !error && (
+                <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-lg">
+                  {translateError(leaveError)}
+                </div>
+              )}
               {joinSuccess && !error && (
                 <div className="bg-green-900/40 border border-green-500 text-green-200 px-4 py-3 rounded-lg">
                   {joinSuccess}
+                </div>
+              )}
+              {leaveSuccess && !error && (
+                <div className="bg-green-900/40 border border-green-500 text-green-200 px-4 py-3 rounded-lg">
+                  {leaveSuccess}
                 </div>
               )}
               <div className="overflow-x-auto">
@@ -151,14 +176,43 @@ const HomeScheduleModal: React.FC<HomeScheduleModalProps> = ({
                           const joinedAnotherSameDay =
                             joinedDays.has(day) && !userJoined;
                           const isJoining = joiningEntryId === entry.id;
+                          const isLeaving = leavingEntryId === entry.id;
+                          const isFull =
+                            entry.participants.length >= MAX_CLASS_PARTICIPANTS;
                           const disableJoin =
-                            joinedAnotherSameDay || userJoined || isJoining;
+                            joinedAnotherSameDay ||
+                            userJoined ||
+                            isJoining ||
+                            isLeaving ||
+                            isFull;
 
                           let buttonLabel = "Anotarme";
                           if (userJoined) buttonLabel = "Ya estás anotado";
                           else if (joinedAnotherSameDay)
                             buttonLabel = "Ya te anotaste en otro horario";
+                          else if (isFull) buttonLabel = "Cupo completo";
                           else if (isJoining) buttonLabel = "Anotando...";
+
+                          const showJoinButton = !userJoined;
+                          const showLeaveButton = userJoined;
+                          const leaveButtonLabel = isLeaving
+                            ? "Desanotando..."
+                            : "Desanotarme";
+
+                          let statusBadge: React.ReactNode = null;
+                          if (isFull && !userJoined) {
+                            statusBadge = (
+                              <span className="text-red-400 font-semibold">
+                                Cupo completo
+                              </span>
+                            );
+                          } else if (userJoined) {
+                            statusBadge = (
+                              <span className="text-green-400 font-semibold">
+                                Anotado
+                              </span>
+                            );
+                          }
 
                           return (
                             <td
@@ -178,27 +232,40 @@ const HomeScheduleModal: React.FC<HomeScheduleModalProps> = ({
                                 </div>
                                 <div className="text-[11px] text-gray-300 flex items-center justify-between">
                                   <span className="bg-gray-800/70 border border-gray-700 rounded px-2 py-0.5">
-                                    Inscritos: {entry.participants.length}
+                                    Inscritos: {entry.participants.length}/
+                                    {MAX_CLASS_PARTICIPANTS}
                                   </span>
-                                  {userJoined && (
-                                    <span className="text-green-400 font-semibold">
-                                      Anotado
-                                    </span>
-                                  )}
+                                  {statusBadge}
                                 </div>
-                                <div className="mt-auto">
-                                  <button
-                                    type="button"
-                                    className={`w-full text-xs font-semibold px-3 py-2 rounded transition-colors ${
-                                      disableJoin
-                                        ? "bg-gray-800 text-gray-500 cursor-not-allowed"
-                                        : "bg-blue-600 hover:bg-blue-700 text-white"
-                                    }`}
-                                    disabled={disableJoin}
-                                    onClick={() => onJoin(entry.id)}
-                                  >
-                                    {buttonLabel}
-                                  </button>
+                                <div className="mt-auto flex flex-col gap-2">
+                                  {showJoinButton && (
+                                    <button
+                                      type="button"
+                                      className={`w-full text-xs font-semibold px-3 py-2 rounded transition-colors ${
+                                        disableJoin
+                                          ? "bg-gray-800 text-gray-500 cursor-not-allowed"
+                                          : "bg-blue-600 hover:bg-blue-700 text-white"
+                                      }`}
+                                      disabled={disableJoin}
+                                      onClick={() => onJoin(entry.id)}
+                                    >
+                                      {buttonLabel}
+                                    </button>
+                                  )}
+                                  {showLeaveButton && (
+                                    <button
+                                      type="button"
+                                      className={`w-full text-xs font-semibold px-3 py-2 rounded transition-colors ${
+                                        isLeaving
+                                          ? "bg-gray-800 text-gray-500 cursor-not-allowed"
+                                          : "bg-red-600 hover:bg-red-700 text-white"
+                                      }`}
+                                      disabled={isLeaving}
+                                      onClick={() => onLeave(entry.id)}
+                                    >
+                                      {leaveButtonLabel}
+                                    </button>
+                                  )}
                                 </div>
                               </div>
                             </td>

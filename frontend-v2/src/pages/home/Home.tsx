@@ -99,6 +99,9 @@ export default function Home() {
   const [joiningEntryId, setJoiningEntryId] = useState<number | null>(null);
   const [joinError, setJoinError] = useState("");
   const [joinSuccess, setJoinSuccess] = useState("");
+  const [leavingEntryId, setLeavingEntryId] = useState<number | null>(null);
+  const [leaveError, setLeaveError] = useState("");
+  const [leaveSuccess, setLeaveSuccess] = useState("");
 
   const { values, handleChange, handleSubmit, isSubmitting, resetForm } =
     useFormik({
@@ -134,6 +137,10 @@ export default function Home() {
     setScheduleError("");
     setJoinError("");
     setJoinSuccess("");
+    setLeaveError("");
+    setLeaveSuccess("");
+    setJoiningEntryId(null);
+    setLeavingEntryId(null);
     try {
       const [scheduleRes, teachersRes] = await Promise.all([
         fetch("http://localhost:7000/api/schedule"),
@@ -176,6 +183,8 @@ export default function Home() {
       if (!client) return;
       setJoinError("");
       setJoinSuccess("");
+      setLeaveError("");
+      setLeaveSuccess("");
       setJoiningEntryId(entryId);
       try {
         const response = await fetch(
@@ -187,7 +196,6 @@ export default function Home() {
           }
         );
         const result = await response.json();
-
         if (!response.ok || (result && typeof result.error === "string")) {
           const message =
             result?.error || "No se pudo completar la inscripción.";
@@ -223,6 +231,60 @@ export default function Home() {
     [client]
   );
 
+  const handleLeaveClass = useCallback(
+    async (entryId: number) => {
+      if (!client) return;
+      setJoinError("");
+      setJoinSuccess("");
+      setLeaveError("");
+      setLeaveSuccess("");
+      setLeavingEntryId(entryId);
+      try {
+        const response = await fetch(
+          `http://localhost:7000/api/schedule/${entryId}/leave`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ countryId: client.countryId }),
+          }
+        );
+        const result = await response.json();
+
+        if (!response.ok || (result && typeof result.error === "string")) {
+          const message =
+            result?.error || "No se pudo completar la desinscripción.";
+          throw new Error(message);
+        }
+
+        const updatedEntryRaw = result.entry as RawScheduleEntry;
+        const [updatedEntry] = normalizeScheduleEntries([updatedEntryRaw]);
+
+        setScheduleEntries((prev) => {
+          const index = prev.findIndex((item) => item.id === updatedEntry.id);
+          if (index === -1) return [...prev, updatedEntry];
+          const clone = [...prev];
+          clone[index] = updatedEntry;
+          return clone;
+        });
+
+        setLeaveSuccess(
+          `Te desanotaste de ${updatedEntry.classType} el ${
+            DAYS_LABEL[updatedEntry.day]
+          } a las ${updatedEntry.time} hs.`
+        );
+      } catch (leaveErr) {
+        const message =
+          leaveErr instanceof Error
+            ? leaveErr.message
+            : "Error inesperado al desinscribirte.";
+        setLeaveError(message);
+      } finally {
+        setLeavingEntryId(null);
+      }
+    },
+    [client]
+  );
+
   const handleOpenSchedule = useCallback(() => {
     if (!client) return;
     setShowScheduleModal(true);
@@ -243,6 +305,10 @@ export default function Home() {
     setScheduleError("");
     setJoinError("");
     setJoinSuccess("");
+    setLeaveError("");
+    setLeaveSuccess("");
+    setJoiningEntryId(null);
+    setLeavingEntryId(null);
   }, [resetForm]);
 
   return (
@@ -272,6 +338,10 @@ export default function Home() {
           client={client}
           joinError={joinError}
           joinSuccess={joinSuccess}
+          onLeave={handleLeaveClass}
+          leavingEntryId={leavingEntryId}
+          leaveError={leaveError}
+          leaveSuccess={leaveSuccess}
         />
       )}
     </>
