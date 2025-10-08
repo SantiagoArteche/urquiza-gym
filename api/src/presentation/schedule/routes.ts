@@ -14,6 +14,7 @@ export class ScheduleRoutes {
     router.post("/", controller.upsert);
     router.put("/", controller.upsert);
     router.post("/:id/join", controller.join);
+    router.post("/:id/leave", controller.leave);
     router.delete("/:id", controller.delete);
 
     return router;

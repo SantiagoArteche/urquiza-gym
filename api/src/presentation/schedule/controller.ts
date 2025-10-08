@@ -61,4 +61,23 @@ export class ScheduleController {
 
     res.json({ entry });
   };
+
+  leave = (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { countryId } = req.body || {};
+
+    const entryId = Number(id);
+    if (Number.isNaN(entryId))
+      return res.status(400).json({ error: "Invalid id" });
+    if (!countryId) return res.status(400).json({ error: "Missing countryId" });
+
+    const [error, entry] = this.service.leaveClass(entryId, String(countryId));
+    if (error) {
+      return res
+        .status(error.code ?? 400)
+        .json({ error: error.message ?? "Unexpected error" });
+    }
+
+    res.json({ entry });
+  };
 }

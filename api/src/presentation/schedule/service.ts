@@ -6,6 +6,7 @@ import {
 } from "./types";
 
 const ALLOWED_DAYS = ["monday", "tuesday", "wednesday", "thursday", "friday"];
+const MAX_PARTICIPANTS = 10;
 
 type ServiceError = { message: string; code?: number } & Record<
   string,
@@ -54,6 +55,11 @@ export class ScheduleService {
       return this.#error("Already joined", 409);
     }
 
+    const participants = entry.participants || [];
+    if (participants.length >= MAX_PARTICIPANTS) {
+      return this.#error("Class is full", 409);
+    }
+
     const sameDayJoined = schedule.some(
       (e) =>
         e.day === entry.day &&
@@ -66,7 +72,33 @@ export class ScheduleService {
 
     const updated: ScheduleEntry = {
       ...entry,
-      participants: [...(entry.participants || []), countryId],
+      participants: [...participants, countryId],
+    };
+
+    const [err, saved] = this.repository.updateById(
+      entryId,
+      updated,
+      "schedule"
+    );
+    if (err) return [err, undefined];
+    return [null, saved as ScheduleEntry];
+  }
+
+  leaveClass(entryId: number, countryId: string): ServiceResult<ScheduleEntry> {
+    const schedule = this.#getScheduleArray();
+    const entry = schedule.find((e) => e.id === entryId);
+    if (!entry) return this.#error("Entry not found", 404);
+
+    const participants = entry.participants || [];
+    if (!participants.includes(countryId)) {
+      return this.#error("Not joined", 400);
+    }
+
+    const updated: ScheduleEntry = {
+      ...entry,
+      participants: participants.filter(
+        (participant) => participant !== countryId
+      ),
     };
 
     const [err, saved] = this.repository.updateById(
