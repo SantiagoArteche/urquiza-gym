@@ -9,8 +9,8 @@ import {
 export interface ScheduleViewProps {
   teachers: { id?: number; name: string; lastName: string }[];
   onSelectSlot: (day: DayOfWeek, time: string) => void;
-  onEditEntry: (id: string) => void;
-  onRemoveEntry: (id: string) => void;
+  onEditEntry: (id: number) => void;
+  onRemoveEntry: (id: number) => void | Promise<void>;
   selectedSlot?: { day: DayOfWeek; time: string } | null;
   editingEntry?: ScheduleEntry | null;
   onCancelEdit: () => void;
@@ -89,6 +89,11 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({
                             <p className="text-xs text-gray-300 truncate uppercase">
                               {getFullName(teacher as TeacherType | undefined)}
                             </p>
+                          </div>
+                          <div className="flex items-center justify-between text-[11px] text-gray-300 mt-1">
+                            <span className="bg-gray-800/70 border border-gray-700 rounded px-2 py-0.5">
+                              Inscritos: {entry.participants?.length ?? 0}
+                            </span>
                           </div>
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1 justify-end text-[10px]">
                             <button

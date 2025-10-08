@@ -14,11 +14,12 @@ export type ClassType =
   | "mixta";
 
 export interface ScheduleEntry {
-  id: string | number;
+  id: number;
   day: DayOfWeek;
   time: string;
   classType: ClassType;
   teacherId: string | number | null;
+  participants: string[];
 }
 
 export interface ScheduleState {

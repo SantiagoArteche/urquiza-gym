@@ -69,13 +69,13 @@ const Schedule: React.FC = () => {
     setEditingEntry(null);
   };
 
-  const onEditEntry = (id: string | number) => {
+  const onEditEntry = (id: number) => {
     const entry = entries.find((e: ScheduleEntry) => e.id === id) || null;
     setEditingEntry(entry);
     setSelectedSlot(null);
   };
 
-  const onRemoveEntry = async (id: string | number) => {
+  const onRemoveEntry = async (id: number) => {
     try {
       const res = await fetch(`http://localhost:7000/api/schedule/${id}`, {
         method: "DELETE",
@@ -97,7 +97,7 @@ const Schedule: React.FC = () => {
 
   const onSave = useCallback(
     async (data: {
-      id?: string | number;
+      id?: number;
       day: DayOfWeek;
       time: string;
       classType: ClassType;
@@ -111,18 +111,21 @@ const Schedule: React.FC = () => {
         });
         const result = await res.json();
         if (!res.ok) throw new Error(result?.error || "Error saving entry");
+        const entry: ScheduleEntry | undefined = result?.entry;
+
+        if (!entry) throw new Error("Invalid response");
         setEntries((prev: ScheduleEntry[]) => {
-          const idx = prev.findIndex((e: ScheduleEntry) => e.id === result.id);
+          const idx = prev.findIndex((e: ScheduleEntry) => e.id === entry.id);
           if (idx >= 0) {
             const clone = [...prev];
-            clone[idx] = result;
+            clone[idx] = entry;
             return clone;
           }
           const withoutSlot = prev.filter(
             (e: ScheduleEntry) =>
-              !(e.day === result.day && e.time === result.time)
+              !(e.day === entry.day && e.time === entry.time)
           );
-          return [...withoutSlot, result];
+          return [...withoutSlot, entry];
         });
         setSelectedSlot(null);
         setEditingEntry(null);

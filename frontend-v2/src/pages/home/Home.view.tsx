@@ -8,6 +8,8 @@ export default function HomeView({
   error,
   client,
   handleLogout,
+  onOpenSchedule,
+  scheduleLoading,
 }: Readonly<HomeViewProps>) {
   return (
     <div className="min-h-screen py-8 text-white bg-gray-950 flex items-center justify-center  font-sans">
@@ -176,6 +178,15 @@ export default function HomeView({
                 </div>
               </div>
               <div className="mt-10 pt-8 border-t border-gym-light-gray">
+                <button
+                  className="w-full mb-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 text-lg rounded-lg transition-all duration-200 shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
+                  onClick={onOpenSchedule}
+                  disabled={scheduleLoading}
+                >
+                  {scheduleLoading
+                    ? "Cargando horario..."
+                    : "Ver horario y anotarme"}
+                </button>
                 <button
                   className="w-full bg-orange-500 hover:bg-orange-600  text-gym-text hover:text-white font-semibold py-4 px-8 text-lg rounded-lg transition-all duration-200 shadow-lg"
                   onClick={handleLogout}

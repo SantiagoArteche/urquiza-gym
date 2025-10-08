@@ -8,6 +8,8 @@ export interface HomeViewProps {
   error: string;
   client: User | null;
   handleLogout: () => void;
+  onOpenSchedule: () => void;
+  scheduleLoading: boolean;
 }
 
 export type FormChangeHandler = React.ChangeEventHandler<
