@@ -42,6 +42,7 @@ export const CreateTeacherView = ({
                 name="name"
                 value={values.name}
                 onChange={handleChange}
+                placeholder="Ingrese nombre"
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
               />
               {touched.name && errors.name && (
@@ -57,6 +58,7 @@ export const CreateTeacherView = ({
               </label>
               <input
                 name="lastName"
+                placeholder="Ingrese apellido"
                 value={values.lastName}
                 onChange={handleChange}
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
@@ -74,6 +76,7 @@ export const CreateTeacherView = ({
               </label>
               <input
                 name="phone"
+                placeholder="Ingrese teléfono"
                 value={values.phone}
                 onChange={handleChange}
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
@@ -91,6 +94,7 @@ export const CreateTeacherView = ({
               </label>
               <input
                 name="countryId"
+                placeholder="Ingrese DNI"
                 value={values.countryId}
                 onChange={handleChange}
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
@@ -108,6 +112,7 @@ export const CreateTeacherView = ({
               </label>
               <input
                 name="emergencyPhone"
+                placeholder="Ingrese tel. emergencia"
                 value={values.emergencyPhone}
                 onChange={handleChange}
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"

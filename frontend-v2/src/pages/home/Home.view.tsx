@@ -77,6 +77,7 @@ export default function HomeView({
                     type="number"
                     id="dni"
                     name="dni"
+                    placeholder="Ingrese su DNI"
                     value={values.dni}
                     onChange={handleChange}
                     required
