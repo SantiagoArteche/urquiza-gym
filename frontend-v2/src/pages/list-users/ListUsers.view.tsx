@@ -54,6 +54,44 @@ export const ListUsersView = ({
       );
     }
 
+    const renderExpirement = (expirement: string) => {
+      const invalidDateHtml = (
+        <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-900 text-red-200">
+          N/A
+        </span>
+      );
+
+      if (!expirement) return invalidDateHtml;
+
+      const expiry = new Date(expirement);
+
+      if (isNaN(expiry.getTime())) return invalidDateHtml;
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const expiryEnd = new Date(expiry);
+      expiryEnd.setHours(23, 59, 59, 999);
+
+      const diffDays = Math.floor(
+        (expiryEnd.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+      );
+
+      let expirementStyle = "bg-green-900 text-green-200";
+      if (diffDays < 0) {
+        expirementStyle = "bg-red-900 text-red-200";
+      } else if (diffDays <= 7) {
+        expirementStyle = "bg-yellow-900 text-yellow-200";
+      }
+
+      return (
+        <span
+          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${expirementStyle}`}
+        >
+          {expirement || "N/A"}
+        </span>
+      );
+    };
+
     return users.map((user) => (
       <tr
         key={user.id}
@@ -64,13 +102,9 @@ export const ListUsersView = ({
             key={col.key}
             className="px-6 py-4 whitespace-nowrap text-sm text-gray-300"
           >
-            {col.key === "expirement" ? (
-              <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-900 text-green-200">
-                {user[col.key as keyof typeof user] || "N/A"}
-              </span>
-            ) : (
-              user[col.key as keyof typeof user] || ""
-            )}
+            {col.key === "expirement"
+              ? renderExpirement(user.expirement)
+              : user[col.key as keyof typeof user] || ""}
           </td>
         ))}
         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
