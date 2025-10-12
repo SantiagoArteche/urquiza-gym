@@ -12,11 +12,11 @@ export interface IRepository {
     limit?: number,
     offset?: number
   ) => any;
-  getById: (id: number, entityKey?: entity) => any;
+  getById: (id: number | string, entityKey?: entity) => any;
   getByCountryId: (countryId: string, entityKey?: entity) => any;
-  deleteById: (id: number, entityKey?: entity) => any;
+  deleteById: (id: number | string, entityKey?: entity) => any;
   create: (data: any, entityKey?: entity, uniqueKey?: string) => any;
-  updateById: (id: number, data: object, entityKey?: entity) => any;
+  updateById: (id: number | string, data: object, entityKey?: entity) => any;
 }
 
 export const repository =

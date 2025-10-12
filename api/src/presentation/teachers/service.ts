@@ -17,7 +17,7 @@ export class TeacherService {
     return this.repository.create(data, "teachers", "countryId");
   }
 
-  getTeacherById(id: number) {
+  getTeacherById(id: number | string) {
     return this.repository.getById(id, "teachers");
   }
 
@@ -25,11 +25,11 @@ export class TeacherService {
     return this.repository.getByCountryId(countryId, "teachers");
   }
 
-  updateTeacherById(id: number, data: object) {
+  updateTeacherById(id: number | string, data: object) {
     return this.repository.updateById(id, data, "teachers");
   }
 
-  deleteTeacher(id: number) {
+  deleteTeacher(id: number | string) {
     return this.repository.deleteById(id, "teachers");
   }
 }

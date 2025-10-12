@@ -1,5 +1,5 @@
 export interface ScheduleEntry {
-  id: number;
+  id: number | string;
   day: string;
   time: string;
   classType: string;
@@ -15,5 +15,5 @@ export interface CreateScheduleEntryDTO {
 }
 
 export interface UpdateScheduleEntryDTO extends CreateScheduleEntryDTO {
-  id: number;
+  id: number | string;
 }

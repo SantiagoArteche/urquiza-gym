@@ -69,13 +69,13 @@ const Schedule: React.FC = () => {
     setEditingEntry(null);
   };
 
-  const onEditEntry = (id: number) => {
+  const onEditEntry = (id: number | string) => {
     const entry = entries.find((e: ScheduleEntry) => e.id === id) || null;
     setEditingEntry(entry);
     setSelectedSlot(null);
   };
 
-  const onRemoveEntry = async (id: number) => {
+  const onRemoveEntry = async (id: number | string) => {
     try {
       const res = await fetch(`http://localhost:7000/api/schedule/${id}`, {
         method: "DELETE",
@@ -97,7 +97,7 @@ const Schedule: React.FC = () => {
 
   const onSave = useCallback(
     async (data: {
-      id?: number;
+      id?: number | string;
       day: DayOfWeek;
       time: string;
       classType: ClassType;

@@ -40,13 +40,16 @@ export class ScheduleService {
       : this.#createOrReplaceSlot(data, schedule);
   }
 
-  deleteEntry(id: number): ServiceResult<boolean> {
+  deleteEntry(id: number | string): ServiceResult<boolean> {
     const [err, result] = this.repository.deleteById(id, "schedule");
     if (err) return [err, undefined];
     return [null, Boolean(result)];
   }
 
-  joinClass(entryId: number, countryId: string): ServiceResult<ScheduleEntry> {
+  joinClass(
+    entryId: number | string,
+    countryId: string
+  ): ServiceResult<ScheduleEntry> {
     const schedule = this.#getScheduleArray();
     const entry = schedule.find((e) => e.id === entryId);
     if (!entry) return this.#error("Entry not found", 404);
@@ -84,7 +87,10 @@ export class ScheduleService {
     return [null, saved as ScheduleEntry];
   }
 
-  leaveClass(entryId: number, countryId: string): ServiceResult<ScheduleEntry> {
+  leaveClass(
+    entryId: number | string,
+    countryId: string
+  ): ServiceResult<ScheduleEntry> {
     const schedule = this.#getScheduleArray();
     const entry = schedule.find((e) => e.id === entryId);
     if (!entry) return this.#error("Entry not found", 404);
@@ -128,9 +134,7 @@ export class ScheduleService {
     data: UpdateScheduleEntryDTO,
     schedule: ScheduleEntry[]
   ): ServiceResult<ScheduleEntry> {
-    const entryId = Number(data.id);
-    if (Number.isNaN(entryId)) return this.#error("Invalid id", 400);
-
+    const entryId = data.id;
     const existing = schedule.find((e) => e.id === entryId);
     if (!existing) return this.#error("Entry not found", 404);
 

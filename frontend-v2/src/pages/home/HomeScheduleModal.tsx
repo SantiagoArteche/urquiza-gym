@@ -14,10 +14,10 @@ type HomeScheduleModalProps = {
   loading: boolean;
   error: string;
   onRetry: () => void;
-  onJoin: (entryId: number) => Promise<void> | void;
-  joiningEntryId: number | null;
-  onLeave: (entryId: number) => Promise<void> | void;
-  leavingEntryId: number | null;
+  onJoin: (entryId: number | string) => Promise<void> | void;
+  joiningEntryId: number | string | null;
+  onLeave: (entryId: number | string) => Promise<void> | void;
+  leavingEntryId: number | string | null;
   client: User;
   joinError: string;
   joinSuccess: string;

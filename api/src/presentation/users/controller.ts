@@ -4,21 +4,17 @@ import { UserService } from "./service";
 export class UserController {
   constructor(private readonly service: UserService) {}
 
-  getUsers = (req: Request, res: Response) => {
+  getUsers = async (req: Request, res: Response) => {
     const { search } = req.query;
 
-    const users = this.service.getUsers(search as string);
+    const users = await this.service.getUsers(search as string);
 
     return res.json({ users });
   };
 
-  getUserById = (req: Request, res: Response) => {
+  getUserById = async (req: Request, res: Response) => {
     const { id } = req.params;
-
-    if (isNaN(+id))
-      return res.status(400).json({ message: "The id must be a number" });
-
-    const [error, foundUser] = this.service.getUserById(+id);
+    const [error, foundUser] = await this.service.getUserById(id);
 
     if (error) return res.status(error.code).json({ message: error.message });
 
@@ -90,11 +86,7 @@ export class UserController {
       expirement,
       debtType,
     };
-
-    if (isNaN(+id))
-      return res.status(400).json({ message: "The id must be a number" });
-
-    const [error, updatedUser] = this.service.updateUserById(+id, data);
+    const [error, updatedUser] = this.service.updateUserById(id, data);
 
     if (error) return res.status(error.code).json({ message: error.message });
 
@@ -103,11 +95,7 @@ export class UserController {
 
   deleteUser = (req: Request, res: Response) => {
     const { id } = req.params;
-
-    if (isNaN(+id))
-      return res.status(400).json({ message: "The id must be a number" });
-
-    const [error] = this.service.deleteUser(+id);
+    const [error] = this.service.deleteUser(id);
 
     if (error) return res.status(error.code).json({ message: error.message });
 

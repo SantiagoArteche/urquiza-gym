@@ -12,10 +12,7 @@ export class TeacherController {
 
   getTeacherById = (req: Request, res: Response) => {
     const { id } = req.params;
-    if (isNaN(+id))
-      return res.status(400).json({ message: "The id must be a number" });
-
-    const [error, foundTeacher] = this.service.getTeacherById(+id);
+    const [error, foundTeacher] = this.service.getTeacherById(id);
     if (error) return res.status(error.code).json({ message: error.message });
     return res.json(foundTeacher);
   };
@@ -79,20 +76,14 @@ export class TeacherController {
       assignedClasses,
     };
 
-    if (isNaN(+id))
-      return res.status(400).json({ message: "The id must be a number" });
-
-    const [error, updatedTeacher] = this.service.updateTeacherById(+id, data);
+    const [error, updatedTeacher] = this.service.updateTeacherById(id, data);
     if (error) return res.status(error.code).json({ message: error.message });
     return res.json(updatedTeacher);
   };
 
   deleteTeacher = (req: Request, res: Response) => {
     const { id } = req.params;
-    if (isNaN(+id))
-      return res.status(400).json({ message: "The id must be a number" });
-
-    const [error] = this.service.deleteTeacher(+id);
+    const [error] = this.service.deleteTeacher(id);
     if (error) return res.status(error.code).json({ message: error.message });
     return res.json({ message: `The teacher with the id ${id} was deleted` });
   };

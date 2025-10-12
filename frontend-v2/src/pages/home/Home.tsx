@@ -96,10 +96,14 @@ export default function Home() {
   const [scheduleError, setScheduleError] = useState("");
   const [scheduleEntries, setScheduleEntries] = useState<ScheduleEntry[]>([]);
   const [teachers, setTeachers] = useState<TeacherType[]>([]);
-  const [joiningEntryId, setJoiningEntryId] = useState<number | null>(null);
+  const [joiningEntryId, setJoiningEntryId] = useState<number | string | null>(
+    null
+  );
   const [joinError, setJoinError] = useState("");
   const [joinSuccess, setJoinSuccess] = useState("");
-  const [leavingEntryId, setLeavingEntryId] = useState<number | null>(null);
+  const [leavingEntryId, setLeavingEntryId] = useState<number | string | null>(
+    null
+  );
   const [leaveError, setLeaveError] = useState("");
   const [leaveSuccess, setLeaveSuccess] = useState("");
 
@@ -179,7 +183,7 @@ export default function Home() {
   }, []);
 
   const handleJoinClass = useCallback(
-    async (entryId: number) => {
+    async (entryId: number | string) => {
       if (!client) return;
       setJoinError("");
       setJoinSuccess("");
@@ -232,7 +236,7 @@ export default function Home() {
   );
 
   const handleLeaveClass = useCallback(
-    async (entryId: number) => {
+    async (entryId: number | string) => {
       if (!client) return;
       setJoinError("");
       setJoinSuccess("");

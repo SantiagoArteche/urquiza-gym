@@ -77,7 +77,7 @@ export class LocalRepository implements IRepository {
     );
   }
 
-  getById(id: number, entityKey?: EntityKey) {
+  getById(id: number | string, entityKey?: EntityKey) {
     if (!entityKey) return [{ message: "Missing key", code: 400 }];
 
     const file = this.#getFile();
@@ -87,7 +87,8 @@ export class LocalRepository implements IRepository {
     if (!entities.length)
       return [{ message: "The searched property must be an array", code: 400 }];
 
-    const foundEntity = entities.find((entity: any) => entity.id === id);
+    const targetId = typeof id === "string" ? Number(id) : id;
+    const foundEntity = entities.find((entity: any) => entity.id === targetId);
 
     if (!foundEntity) return [{ message: "Entity not found", code: 404 }];
 
@@ -115,7 +116,7 @@ export class LocalRepository implements IRepository {
     return [null, foundEntity];
   }
 
-  deleteById(id: number, entityKey?: EntityKey) {
+  deleteById(id: number | string, entityKey?: EntityKey) {
     if (!entityKey) return [{ message: "Missing key", code: 400 }];
 
     const file = this.#getFile();
@@ -125,7 +126,10 @@ export class LocalRepository implements IRepository {
     if (!entities.length)
       return [{ message: "The searched property must be an array", code: 400 }];
 
-    const newEntities = entities.filter((entity: any) => entity.id !== id);
+    const targetId = typeof id === "string" ? Number(id) : id;
+    const newEntities = entities.filter(
+      (entity: any) => entity.id !== targetId
+    );
 
     if (newEntities.length === entities.length)
       return [{ message: "Entity not found", code: 404 }];
@@ -137,7 +141,7 @@ export class LocalRepository implements IRepository {
     return [null, true];
   }
 
-  updateById(id: number, data: object, entityKey?: EntityKey) {
+  updateById(id: number | string, data: object, entityKey?: EntityKey) {
     if (!entityKey) return ["Missing key"];
 
     const file = this.#getFile();
@@ -147,18 +151,24 @@ export class LocalRepository implements IRepository {
     if (!entities.length)
       return [{ message: "The searched property must be an array", code: 400 }];
 
-    const foundEntity = entities.find((entity: any) => entity.id === id);
+    const targetId = typeof id === "string" ? Number(id) : id;
+    const foundEntity = entities.find((entity: any) => entity.id === targetId);
 
     if (!foundEntity) return [{ message: "Entity not found", code: 404 }];
 
-    file[entityKey] = this.#updateEntity(file, entityKey, data, id);
+    file[entityKey] = this.#updateEntity(file, entityKey, data, targetId);
 
     fs.writeFileSync(dbPath, JSON.stringify(file));
 
     return [null, data];
   }
 
-  #updateEntity(file: any, entityKey: string, data: object, entityId: number) {
+  #updateEntity(
+    file: any,
+    entityKey: string,
+    data: object,
+    entityId: number | string
+  ) {
     return file[entityKey].map((entity: any) => {
       if (entity.id === entityId) {
         entity = { ...data, id: entityId };

@@ -2,6 +2,7 @@ import type { FormChangeHandler, FormSubmitHandler } from "./general";
 
 export type User = {
   id?: string;
+  _id?: string;
   name: string;
   lastName: string;
   phone: string;

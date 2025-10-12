@@ -31,9 +31,7 @@ export class ScheduleController {
   delete = (req: Request, res: Response) => {
     const { id } = req.params;
 
-    if (Number.isNaN(+id)) return res.status(400).json({ error: "Invalid id" });
-
-    const [error] = this.service.deleteEntry(+id);
+    const [error] = this.service.deleteEntry(id);
 
     if (error)
       return res
@@ -47,12 +45,9 @@ export class ScheduleController {
     const { id } = req.params;
     const { countryId } = req.body || {};
 
-    const entryId = Number(id);
-    if (Number.isNaN(entryId))
-      return res.status(400).json({ error: "Invalid id" });
     if (!countryId) return res.status(400).json({ error: "Missing countryId" });
 
-    const [error, entry] = this.service.joinClass(entryId, String(countryId));
+    const [error, entry] = this.service.joinClass(id, String(countryId));
     if (error) {
       return res
         .status(error.code ?? 400)
@@ -66,12 +61,9 @@ export class ScheduleController {
     const { id } = req.params;
     const { countryId } = req.body || {};
 
-    const entryId = Number(id);
-    if (Number.isNaN(entryId))
-      return res.status(400).json({ error: "Invalid id" });
     if (!countryId) return res.status(400).json({ error: "Missing countryId" });
 
-    const [error, entry] = this.service.leaveClass(entryId, String(countryId));
+    const [error, entry] = this.service.leaveClass(id, String(countryId));
     if (error) {
       return res
         .status(error.code ?? 400)
