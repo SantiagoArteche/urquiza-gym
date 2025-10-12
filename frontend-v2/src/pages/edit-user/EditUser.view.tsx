@@ -112,12 +112,21 @@ export default function EditUserView({
             >
               Tipo de deuda
             </label>
-            <input
+            <select
               name="debtType"
               value={values.debtType}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2 bg-gray-900 text-white border-gray-700"
-            />
+              className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+            >
+              <option value="">Seleccione tipo de deuda</option>
+              <option value="Pilates Camilla">Pilates Camilla</option>
+              <option value="Telas">Telas</option>
+              <option value="Clases Grupales">Clases Grupales</option>
+              <option value="Sala">Sala</option>
+              <option value="Mixta">Mixta</option>
+              <option value="Sala-Pilates">Sala-Pilates</option>
+              <option value="Clases-Pilates">Clases-Pilates</option>
+            </select>
           </div>
           {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
           <div className="flex gap-4 pt-4">

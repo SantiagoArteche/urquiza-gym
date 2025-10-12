@@ -132,7 +132,7 @@ export const CreateUserView = ({
                 <option value="Sala">Sala</option>
                 <option value="Mixta">Mixta</option>
                 <option value="Sala-Pilates">Sala-Pilates</option>
-                <option value="clases-Pilates">Clases-Pilates</option>
+                <option value="Clases-Pilates">Clases-Pilates</option>
               </select>
             </div>
           </div>
