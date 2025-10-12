@@ -6,8 +6,8 @@
       "phone": "3413640110",
       "countryId": "411669582",
       "emergencyPhone": "34343",
-      "expirement": "2025-10-30",
-      "debtType": "Pilates Camilla",
+      "expirement": "2025-10-24",
+      "debtType": "Pilates-Camilla",
       "id": 6
     },
     {
@@ -19,16 +19,6 @@
       "expirement": "2025-10-09",
       "debtType": "Mixta",
       "id": 10
-    },
-    {
-      "name": "Santiago Daniel",
-      "lastName": "Arteche",
-      "phone": "03413650110",
-      "countryId": "Argentina",
-      "emergencyPhone": "03413650110",
-      "expirement": "",
-      "debtType": "Mixta",
-      "id": 11
     },
     {
       "name": "Santiago Daniel",
@@ -62,10 +52,10 @@
       "id": 5
     },
     {
-      "name": "Santiago Daniel",
+      "name": " Daniel",
       "lastName": "Arteche",
       "phone": "03413650110",
-      "countryId": "Argentina",
+      "countryId": "40298833",
       "emergencyPhone": "03413650110",
       "assignedClasses": ["Mixta", "Clases Grupales"],
       "id": 6
@@ -100,7 +90,7 @@
       "day": "thursday",
       "time": "08:00",
       "classType": "clases grupales",
-      "teacherId": "3",
+      "teacherId": "5",
       "id": 6,
       "participants": []
     },
@@ -113,27 +103,11 @@
       "participants": []
     },
     {
-      "day": "thursday",
-      "time": "09:00",
-      "classType": "clases grupales",
-      "teacherId": "3",
-      "id": 8,
-      "participants": []
-    },
-    {
       "day": "wednesday",
       "time": "08:00",
       "classType": "camilla",
-      "teacherId": "3",
+      "teacherId": "6",
       "id": 9,
-      "participants": []
-    },
-    {
-      "day": "wednesday",
-      "time": "09:00",
-      "classType": "camilla",
-      "teacherId": "5",
-      "id": 10,
       "participants": []
     },
     {
@@ -199,6 +173,14 @@
       "teacherId": "5",
       "participants": ["41166958"],
       "id": 19
+    },
+    {
+      "day": "wednesday",
+      "time": "10:00",
+      "classType": "camilla",
+      "teacherId": "6",
+      "participants": [],
+      "id": 20
     }
   ]
 }
