@@ -2,7 +2,7 @@ import type { FormikErrors, FormikTouched } from "formik";
 import type { FormChangeHandler, FormSubmitHandler } from "./general";
 
 export type TeacherType = {
-  id?: string;
+  id?: string | number;
   name: string;
   lastName: string;
   phone: string;

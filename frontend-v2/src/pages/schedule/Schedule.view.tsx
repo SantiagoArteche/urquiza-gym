@@ -8,7 +8,7 @@ import {
 } from "../../types";
 
 export interface ScheduleViewProps {
-  teachers: { id?: number; name: string; lastName: string }[];
+  teachers: { id?: number | string; name: string; lastName: string }[];
   onSelectSlot: (day: DayOfWeek, time: string) => void;
   onEditEntry: (id: number | string) => void;
   onRemoveEntry: (id: number | string) => void | Promise<void>;
