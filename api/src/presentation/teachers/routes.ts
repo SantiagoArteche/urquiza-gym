@@ -1,13 +1,12 @@
 import { Router } from "express";
 import { TeacherService } from "./service";
-import { LocalRepository } from "../../data/localDB/local-repository";
 import { TeacherController } from "./controller";
+import { repository } from "../../data/repository";
 
 export class TeacherRoutes {
   static get router() {
     const router = Router();
 
-    const repository = new LocalRepository();
     const service = new TeacherService(repository);
     const controller = new TeacherController(service);
 

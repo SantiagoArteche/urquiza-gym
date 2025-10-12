@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { ScheduleController } from "./controller";
 import { ScheduleService } from "./service";
-import { LocalRepository } from "../../data/localDB/local-repository";
+import { repository } from "../../data/repository";
 
 export class ScheduleRoutes {
   static get router() {
     const router = Router();
-    const repository = new LocalRepository();
+
     const service = new ScheduleService(repository);
     const controller = new ScheduleController(service);
 

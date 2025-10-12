@@ -1,13 +1,12 @@
 import { Router } from "express";
 import { UserService } from "./service";
-import { LocalRepository } from "../../data/localDB/local-repository";
 import { UserController } from "./controller";
+import { repository } from "../../data/repository";
 
 export class UserRoutes {
   static get router() {
     const router = Router();
 
-    const repository = new LocalRepository();
     const service = new UserService(repository);
     const controller = new UserController(service);
 
