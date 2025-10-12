@@ -10,8 +10,8 @@ import {
 export interface ScheduleViewProps {
   teachers: { id?: number; name: string; lastName: string }[];
   onSelectSlot: (day: DayOfWeek, time: string) => void;
-  onEditEntry: (id: number) => void;
-  onRemoveEntry: (id: number) => void | Promise<void>;
+  onEditEntry: (id: number | string) => void;
+  onRemoveEntry: (id: number | string) => void | Promise<void>;
   selectedSlot?: { day: DayOfWeek; time: string } | null;
   editingEntry?: ScheduleEntry | null;
   onCancelEdit: () => void;

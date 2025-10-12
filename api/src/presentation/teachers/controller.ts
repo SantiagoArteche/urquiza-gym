@@ -4,22 +4,24 @@ import { TeacherService } from "./service";
 export class TeacherController {
   constructor(private readonly service: TeacherService) {}
 
-  getTeachers = (req: Request, res: Response) => {
+  getTeachers = async (req: Request, res: Response) => {
     const { search } = req.query;
-    const teachers = this.service.getTeachers((search as string) || "");
+    const teachers = await this.service.getTeachers((search as string) || "");
     return res.json({ teachers });
   };
 
-  getTeacherById = (req: Request, res: Response) => {
+  getTeacherById = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const [error, foundTeacher] = this.service.getTeacherById(id);
+    const [error, foundTeacher] = await this.service.getTeacherById(id);
     if (error) return res.status(error.code).json({ message: error.message });
     return res.json(foundTeacher);
   };
 
-  getTeacherByCountryId = (req: Request, res: Response) => {
+  getTeacherByCountryId = async (req: Request, res: Response) => {
     const { countryId } = req.params;
-    const [error, foundTeacher] = this.service.getTeacherByCountryId(countryId);
+    const [error, foundTeacher] = await this.service.getTeacherByCountryId(
+      countryId
+    );
     if (error) return res.status(error.code).json({ message: error.message });
     return res.json(foundTeacher);
   };
@@ -56,7 +58,7 @@ export class TeacherController {
     return res.status(201).json({ success: true, teacher: newTeacher });
   };
 
-  updateTeacherById = (req: Request, res: Response) => {
+  updateTeacherById = async (req: Request, res: Response) => {
     const { id } = req.params;
     const {
       name,
@@ -76,14 +78,17 @@ export class TeacherController {
       assignedClasses,
     };
 
-    const [error, updatedTeacher] = this.service.updateTeacherById(id, data);
+    const [error, updatedTeacher] = await this.service.updateTeacherById(
+      id,
+      data
+    );
     if (error) return res.status(error.code).json({ message: error.message });
     return res.json(updatedTeacher);
   };
 
-  deleteTeacher = (req: Request, res: Response) => {
+  deleteTeacher = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const [error] = this.service.deleteTeacher(id);
+    const [error] = await this.service.deleteTeacher(id);
     if (error) return res.status(error.code).json({ message: error.message });
     return res.json({ message: `The teacher with the id ${id} was deleted` });
   };

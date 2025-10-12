@@ -4,8 +4,8 @@ import { Teacher } from "./types";
 export class TeacherService {
   constructor(private readonly repository: IRepository) {}
 
-  getTeachers(search: string): Teacher[] {
-    const file = this.repository.getAll(
+  async getTeachers(search: string): Promise<Teacher[]> {
+    const file = await this.repository.getAll(
       "teachers",
       "fullNameAndCountryId",
       search

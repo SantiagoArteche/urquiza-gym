@@ -93,7 +93,7 @@ export class MongoRepository implements IRepository {
   }
 
   async create(data: any, entityKey?: EntityKey, uniqueKey?: string) {
-    if (!entityKey) return { error: "Missing key" };
+    if (!entityKey) return [{ message: "Missing key", code: 400 }];
     const Model: any = this.#modelFor(entityKey);
 
     const toInsert = { ...data };
@@ -119,7 +119,7 @@ export class MongoRepository implements IRepository {
   }
 
   async updateById(id: number | string, data: object, entityKey?: EntityKey) {
-    if (!entityKey) return ["Missing key"];
+    if (!entityKey) return [{ message: "Missing key", code: 400 }];
     const Model: any = this.#modelFor(entityKey);
     if (typeof id !== "string" || !isValidObjectId(id)) {
       return [{ message: "Invalid id", code: 400 }];

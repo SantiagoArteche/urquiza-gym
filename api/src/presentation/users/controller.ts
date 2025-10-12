@@ -21,10 +21,10 @@ export class UserController {
     return res.json(foundUser);
   };
 
-  getUserByCountryId = (req: Request, res: Response) => {
+  getUserByCountryId = async (req: Request, res: Response) => {
     const { countryId } = req.params;
 
-    const [error, foundUser] = this.service.getUserByCountryId(countryId);
+    const [error, foundUser] = await this.service.getUserByCountryId(countryId);
 
     if (error) return res.status(error.code).json({ message: error.message });
 
@@ -65,7 +65,7 @@ export class UserController {
     return res.status(201).json({ success: true, user: newUser });
   };
 
-  updateUserById = (req: Request, res: Response) => {
+  updateUserById = async (req: Request, res: Response) => {
     const { id } = req.params;
     const {
       name,
@@ -86,16 +86,16 @@ export class UserController {
       expirement,
       debtType,
     };
-    const [error, updatedUser] = this.service.updateUserById(id, data);
+    const [error, updatedUser] = await this.service.updateUserById(id, data);
 
     if (error) return res.status(error.code).json({ message: error.message });
 
     return res.json(updatedUser);
   };
 
-  deleteUser = (req: Request, res: Response) => {
+  deleteUser = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const [error] = this.service.deleteUser(id);
+    const [error] = await this.service.deleteUser(id);
 
     if (error) return res.status(error.code).json({ message: error.message });
 
