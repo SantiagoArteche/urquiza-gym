@@ -4,8 +4,8 @@ import { ScheduleService } from "./service";
 export class ScheduleController {
   constructor(private readonly service: ScheduleService) {}
 
-  getSchedule = (_req: Request, res: Response) => {
-    const [error, schedule] = this.service.getSchedule();
+  getSchedule = async (_req: Request, res: Response) => {
+    const [error, schedule] = await this.service.getSchedule();
     if (error) {
       return res
         .status(error.code ?? 500)
@@ -15,9 +15,9 @@ export class ScheduleController {
     res.json({ schedule: schedule ?? [] });
   };
 
-  upsert = (req: Request, res: Response) => {
+  upsert = async (req: Request, res: Response) => {
     const body = req.body;
-    const [error, entry] = this.service.upsertEntry(body);
+    const [error, entry] = await this.service.upsertEntry(body);
 
     if (error) {
       return res
@@ -28,10 +28,10 @@ export class ScheduleController {
     res.json({ entry });
   };
 
-  delete = (req: Request, res: Response) => {
+  delete = async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    const [error] = this.service.deleteEntry(id);
+    const [error] = await this.service.deleteEntry(id);
 
     if (error)
       return res
@@ -41,13 +41,13 @@ export class ScheduleController {
     res.json({ message: `The schedule entry with the id ${id} was deleted` });
   };
 
-  join = (req: Request, res: Response) => {
+  join = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { countryId } = req.body || {};
 
     if (!countryId) return res.status(400).json({ error: "Missing countryId" });
 
-    const [error, entry] = this.service.joinClass(id, String(countryId));
+    const [error, entry] = await this.service.joinClass(id, countryId);
     if (error) {
       return res
         .status(error.code ?? 400)
@@ -57,13 +57,13 @@ export class ScheduleController {
     res.json({ entry });
   };
 
-  leave = (req: Request, res: Response) => {
+  leave = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { countryId } = req.body || {};
 
     if (!countryId) return res.status(400).json({ error: "Missing countryId" });
 
-    const [error, entry] = this.service.leaveClass(id, String(countryId));
+    const [error, entry] = await this.service.leaveClass(id, String(countryId));
     if (error) {
       return res
         .status(error.code ?? 400)

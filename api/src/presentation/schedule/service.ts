@@ -17,8 +17,8 @@ type ServiceResult<T> = [ServiceError | null, T | undefined];
 export class ScheduleService {
   constructor(private readonly repository: IRepository) {}
 
-  getSchedule(): ServiceResult<ScheduleEntry[]> {
-    const file = this.repository.getAll("schedule", "none");
+  async getSchedule(): Promise<ServiceResult<ScheduleEntry[]>> {
+    const file = await this.repository.getAll("schedule", "none");
     const schedule: ScheduleEntry[] = file.schedule || [];
     const normalized = schedule.map((entry) => ({
       ...entry,
@@ -27,31 +27,31 @@ export class ScheduleService {
     return [null, normalized];
   }
 
-  upsertEntry(
+  async upsertEntry(
     data: CreateScheduleEntryDTO | UpdateScheduleEntryDTO
-  ): ServiceResult<ScheduleEntry> {
+  ): Promise<ServiceResult<ScheduleEntry>> {
     const validationError = this.#validatePayload(data);
     if (validationError) return this.#error(validationError, 400);
 
-    const schedule = this.#getScheduleArray();
+    const schedule = await this.#getScheduleArray();
 
     return "id" in data
       ? this.#updateExisting(data, schedule)
       : this.#createOrReplaceSlot(data, schedule);
   }
 
-  deleteEntry(id: number | string): ServiceResult<boolean> {
-    const [err, result] = this.repository.deleteById(id, "schedule");
+  async deleteEntry(id: number | string): Promise<ServiceResult<boolean>> {
+    const [err, result] = await this.repository.deleteById(id, "schedule");
     if (err) return [err, undefined];
     return [null, Boolean(result)];
   }
 
-  joinClass(
+  async joinClass(
     entryId: number | string,
     countryId: string
-  ): ServiceResult<ScheduleEntry> {
-    const schedule = this.#getScheduleArray();
-    const entry = schedule.find((e) => e.id === entryId);
+  ): Promise<ServiceResult<ScheduleEntry>> {
+    const schedule = await this.#getScheduleArray();
+    const entry = schedule.find((e) => e.id == entryId);
     if (!entry) return this.#error("Entry not found", 404);
 
     if ((entry.participants || []).includes(countryId)) {
@@ -78,7 +78,7 @@ export class ScheduleService {
       participants: [...participants, countryId],
     };
 
-    const [err, saved] = this.repository.updateById(
+    const [err, saved] = await this.repository.updateById(
       entryId,
       updated,
       "schedule"
@@ -87,12 +87,12 @@ export class ScheduleService {
     return [null, saved as ScheduleEntry];
   }
 
-  leaveClass(
+  async leaveClass(
     entryId: number | string,
     countryId: string
-  ): ServiceResult<ScheduleEntry> {
-    const schedule = this.#getScheduleArray();
-    const entry = schedule.find((e) => e.id === entryId);
+  ): Promise<ServiceResult<ScheduleEntry>> {
+    const schedule = await this.#getScheduleArray();
+    const entry = schedule.find((e) => e.id == entryId);
     if (!entry) return this.#error("Entry not found", 404);
 
     const participants = entry.participants || [];
@@ -103,11 +103,11 @@ export class ScheduleService {
     const updated: ScheduleEntry = {
       ...entry,
       participants: participants.filter(
-        (participant) => participant !== countryId
+        (participant) => participant != countryId
       ),
     };
 
-    const [err, saved] = this.repository.updateById(
+    const [err, saved] = await this.repository.updateById(
       entryId,
       updated,
       "schedule"
@@ -122,24 +122,24 @@ export class ScheduleService {
     return null;
   }
 
-  #getScheduleArray(): ScheduleEntry[] {
-    const file = this.repository.getAll("schedule", "none");
+  async #getScheduleArray(): Promise<ScheduleEntry[]> {
+    const file = await this.repository.getAll("schedule", "none");
     return (file.schedule || []).map((entry: ScheduleEntry) => ({
       ...entry,
       participants: entry.participants || [],
     }));
   }
 
-  #updateExisting(
+  async #updateExisting(
     data: UpdateScheduleEntryDTO,
     schedule: ScheduleEntry[]
-  ): ServiceResult<ScheduleEntry> {
+  ): Promise<ServiceResult<ScheduleEntry>> {
     const entryId = data.id;
-    const existing = schedule.find((e) => e.id === entryId);
+    const existing = schedule.find((e) => e.id == entryId);
     if (!existing) return this.#error("Entry not found", 404);
 
     const clash = schedule.find(
-      (e) => e.day === data.day && e.time === data.time && e.id !== entryId
+      (e) => e.day === data.day && e.time === data.time && e.id != entryId
     );
     if (clash) return this.#error("Day/time already used", 409);
 
@@ -150,7 +150,7 @@ export class ScheduleService {
       participants: existing.participants || [],
     };
 
-    const [err, saved] = this.repository.updateById(
+    const [err, saved] = await this.repository.updateById(
       entryId,
       updated,
       "schedule"
@@ -160,10 +160,10 @@ export class ScheduleService {
     return [null, saved as ScheduleEntry];
   }
 
-  #createOrReplaceSlot(
+  async #createOrReplaceSlot(
     data: CreateScheduleEntryDTO,
     schedule: ScheduleEntry[]
-  ): ServiceResult<ScheduleEntry> {
+  ): Promise<ServiceResult<ScheduleEntry>> {
     const existingSlot = schedule.find(
       (e) => e.day === data.day && e.time === data.time
     );
@@ -174,7 +174,7 @@ export class ScheduleService {
         id: existingSlot.id,
         participants: existingSlot.participants || [],
       };
-      const [err, saved] = this.repository.updateById(
+      const [err, saved] = await this.repository.updateById(
         updated.id,
         updated,
         "schedule"
@@ -184,7 +184,7 @@ export class ScheduleService {
       return [null, saved as ScheduleEntry];
     }
 
-    const [err, created] = this.repository.create(
+    const [err, created] = await this.repository.create(
       { ...data, participants: [] },
       "schedule"
     );

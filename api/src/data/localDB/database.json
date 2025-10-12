@@ -1,32 +1,12 @@
 {
   "users": [
     {
-      "name": "Daniel",
-      "lastName": "Daniel Arteche",
-      "phone": "03413650110",
-      "countryId": "4116695",
-      "emergencyPhone": "3413650110",
-      "expirement": "2222-02-22",
-      "debtType": "Sala-Pilates",
-      "id": 3
-    },
-    {
-      "name": "Marcos",
-      "lastName": "Martinez",
-      "phone": "41166958",
-      "countryId": "41166958",
-      "emergencyPhone": "3413650110",
-      "expirement": "2025-10-10",
-      "debtType": "Telas",
-      "id": 5
-    },
-    {
       "name": "Santiago",
       "lastName": "Arteche",
       "phone": "3413640110",
       "countryId": "411669582",
       "emergencyPhone": "34343",
-      "expirement": "2025-10-09",
+      "expirement": "2025-10-30",
       "debtType": "Pilates Camilla",
       "id": 6
     },
@@ -59,34 +39,19 @@
       "expirement": "2025-10-01",
       "debtType": "Sala",
       "id": 12
+    },
+    {
+      "name": "Santiago Daniel",
+      "lastName": "Arteche",
+      "phone": "03413650110",
+      "countryId": "41166958",
+      "emergencyPhone": "03413650110",
+      "expirement": "2025-10-16",
+      "debtType": "Mixta",
+      "id": 13
     }
   ],
   "teachers": [
-    {
-      "name": "Daniel",
-      "lastName": "Diaz",
-      "phone": "3413640110",
-      "countryId": "4116695821",
-      "emergencyPhone": "3413650110",
-      "assignedClasses": ["Telas", "Clases Grupales"],
-      "id": 2
-    },
-    {
-      "name": "Paulo",
-      "lastName": "Arteche",
-      "phone": "3413640110",
-      "countryId": "41166958213",
-      "emergencyPhone": "34343",
-      "assignedClasses": [
-        "Pilates",
-        "Mixta",
-        "Clases Grupales",
-        "Camilla",
-        "Telas",
-        "Sala"
-      ],
-      "id": 3
-    },
     {
       "name": "Santiago Daniel",
       "lastName": "Arteche",
@@ -95,6 +60,15 @@
       "emergencyPhone": "03413650110",
       "assignedClasses": ["Clases Grupales", "Telas"],
       "id": 5
+    },
+    {
+      "name": "Santiago Daniel",
+      "lastName": "Arteche",
+      "phone": "03413650110",
+      "countryId": "Argentina",
+      "emergencyPhone": "03413650110",
+      "assignedClasses": ["Mixta", "Clases Grupales"],
+      "id": 6
     }
   ],
   "schedule": [
@@ -183,7 +157,7 @@
       "time": "11:00",
       "classType": "camilla",
       "teacherId": "2",
-      "participants": [],
+      "participants": ["41166958"],
       "id": 14
     },
     {

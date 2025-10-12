@@ -31,18 +31,9 @@ const normalizeScheduleEntries = (raw: unknown): ScheduleEntry[] => {
         : null;
 
     const rawId = item.id;
-    let id: number;
-    if (typeof rawId === "number") {
-      id = rawId;
-    } else if (typeof rawId === "string") {
-      const numericId = Number(rawId);
-      id = Number.isNaN(numericId) ? Date.now() + Math.random() : numericId;
-    } else {
-      id = Date.now() + Math.random();
-    }
 
     return {
-      id,
+      id: rawId!,
       day: (item.day as ScheduleEntry["day"]) || DEFAULT_DAY,
       time: item.time || "00:00",
       classType:
@@ -65,16 +56,9 @@ const normalizeTeachersList = (raw: unknown): TeacherType[] => {
   }
 
   return list.map((teacher) => {
-    let teacherId: number | undefined;
-    if (typeof teacher?.id === "number") {
-      teacherId = teacher.id;
-    } else if (teacher?.id !== undefined) {
-      const numericId = Number(teacher.id);
-      teacherId = Number.isNaN(numericId) ? undefined : numericId;
-    }
-
+    const rawId = teacher.id;
     return {
-      id: teacherId,
+      id: rawId,
       name: teacher?.name || "",
       lastName: teacher?.lastName || "",
       phone: teacher?.phone || "",

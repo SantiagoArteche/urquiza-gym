@@ -69,8 +69,9 @@ const HomeScheduleModal: React.FC<HomeScheduleModalProps> = ({
 
   const days = Object.keys(DAYS_LABEL) as DayOfWeek[];
 
-  const getEntry = (day: DayOfWeek, time: string) =>
-    schedule.find((entry) => entry.day === day && entry.time === time);
+  const getEntry = (day: DayOfWeek, time: string) => {
+    return schedule.find((entry) => entry.day === day && entry.time === time);
+  };
 
   const findTeacher = (teacherId: string | number | null) =>
     teachers.find((teacher) => String(teacher.id) === String(teacherId));
@@ -159,6 +160,7 @@ const HomeScheduleModal: React.FC<HomeScheduleModalProps> = ({
                         </td>
                         {days.map((day) => {
                           const entry = getEntry(day, time);
+                          console.log(entry);
                           if (!entry) {
                             return (
                               <td

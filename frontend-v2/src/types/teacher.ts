@@ -2,7 +2,7 @@ import type { FormikErrors, FormikTouched } from "formik";
 import type { FormChangeHandler, FormSubmitHandler } from "./general";
 
 export type TeacherType = {
-  id?: number;
+  id?: string;
   name: string;
   lastName: string;
   phone: string;
@@ -12,9 +12,9 @@ export type TeacherType = {
 };
 
 export type CreateTeacherViewType = {
-  values: Omit<TeacherType, "id"> & { id?: number };
-  errors: FormikErrors<Omit<TeacherType, "id"> & { id?: number }>;
-  touched: FormikTouched<Omit<TeacherType, "id"> & { id?: number }>;
+  values: Omit<TeacherType, "id"> & { id?: string };
+  errors: FormikErrors<Omit<TeacherType, "id"> & { id?: string }>;
+  touched: FormikTouched<Omit<TeacherType, "id"> & { id?: string }>;
   handleChange: FormChangeHandler;
   handleSubmit: FormSubmitHandler;
   isSubmitting: boolean;
@@ -27,9 +27,9 @@ export type CreateTeacherViewType = {
 };
 
 export type EditTeacherViewType = {
-  values: Omit<TeacherType, "id"> & { id?: number };
-  errors: FormikErrors<Omit<TeacherType, "id"> & { id?: number }>;
-  touched: FormikTouched<Omit<TeacherType, "id"> & { id?: number }>;
+  values: Omit<TeacherType, "id"> & { id?: string };
+  errors: FormikErrors<Omit<TeacherType, "id"> & { id?: string }>;
+  touched: FormikTouched<Omit<TeacherType, "id"> & { id?: string }>;
   handleChange: FormChangeHandler;
   handleSubmit: FormSubmitHandler;
   isSubmitting: boolean;

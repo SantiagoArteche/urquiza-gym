@@ -54,7 +54,12 @@ export class MongoRepository implements IRepository {
     if (typeof limit === "number") query.limit(limit);
 
     const docs = await query.exec();
-    return { [entityKey]: docs } as any;
+    const normalized = docs.map((doc: any) => {
+      const idValue = doc.id ?? doc._id?.toString();
+      const { _id, ...rest } = doc;
+      return { ...rest, id: idValue };
+    });
+    return { [entityKey]: normalized } as any;
   }
 
   async getById(id: number | string, entityKey?: EntityKey) {
@@ -66,7 +71,9 @@ export class MongoRepository implements IRepository {
     const filter: any = { _id: new Types.ObjectId(id) };
     const doc = await Model.findOne(filter).lean();
     if (!doc) return [{ message: "Entity not found", code: 404 }];
-    return [null, { ...doc, id: String(doc._id) }];
+    const idValue = doc.id ?? doc._id?.toString();
+    const { _id, ...rest } = doc;
+    return [null, { ...rest, id: idValue }];
   }
 
   async getByCountryId(countryId: string, entityKey?: EntityKey) {
@@ -76,7 +83,9 @@ export class MongoRepository implements IRepository {
     const Model: any = this.#modelFor(entityKey);
     const doc = await Model.findOne({ countryId }).lean();
     if (!doc) return [{ message: "User not found", code: 404 }];
-    return [null, { ...doc, id: String(doc._id) }];
+    const idValue = doc.id ?? doc._id?.toString();
+    const { _id, ...rest } = doc;
+    return [null, { ...rest, id: idValue }];
   }
 
   async deleteById(id: number | string, entityKey?: EntityKey) {
@@ -96,7 +105,9 @@ export class MongoRepository implements IRepository {
     if (!entityKey) return [{ message: "Missing key", code: 400 }];
     const Model: any = this.#modelFor(entityKey);
 
-    const toInsert = { ...data };
+    const toInsert: Record<string, any> = { ...data };
+    delete toInsert._id;
+    delete toInsert.id;
 
     if (uniqueKey) {
       const exists = await Model.findOne({ [uniqueKey]: toInsert[uniqueKey] })
@@ -115,7 +126,9 @@ export class MongoRepository implements IRepository {
 
     const created = await Model.create(toInsert);
     const obj = created.toObject();
-    return [null, { ...obj, id: String(obj._id) }];
+    const idValue = obj.id ?? obj._id?.toString();
+    const { _id, ...rest } = obj;
+    return [null, { ...rest, id: idValue }];
   }
 
   async updateById(id: number | string, data: object, entityKey?: EntityKey) {
@@ -127,9 +140,15 @@ export class MongoRepository implements IRepository {
     const filter: any = { _id: new Types.ObjectId(id) };
     const found = await Model.findOne(filter).select({ _id: 1 }).lean();
     if (!found) return [{ message: "Entity not found", code: 404 }];
-    await Model.updateOne(filter, { $set: { ...data } });
+    const toUpdate: Record<string, any> = { ...(data as any) };
+    delete toUpdate._id;
+    delete toUpdate.id;
+    await Model.updateOne(filter, { $set: toUpdate });
     const updated = await Model.findOne(filter).lean();
-    return [null, updated ? { ...updated, id: String(updated._id) } : updated];
+    if (!updated) return [null, updated];
+    const idValue = updated.id ?? updated._id?.toString();
+    const { _id, ...rest } = updated;
+    return [null, { ...rest, id: idValue }];
   }
 
   static connect() {

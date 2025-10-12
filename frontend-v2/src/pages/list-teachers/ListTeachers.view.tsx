@@ -56,7 +56,7 @@ export const ListTeachersView = ({
 
     return teachers.map((teacher) => (
       <tr
-        key={teacher.id ?? teacher._id}
+        key={teacher.id}
         className="hover:bg-gray-800 transition-colors duration-150"
       >
         {columns.map((col) => (
@@ -76,9 +76,7 @@ export const ListTeachersView = ({
         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
           <button
             className="text-blue-400 hover:text-orange-500 transition-colors duration-200 cursor-pointer"
-            onClick={() =>
-              navigate(`/edit-teacher/${teacher.id ?? teacher._id}`)
-            }
+            onClick={() => navigate(`/edit-teacher/${teacher.id}`)}
           >
             <svg
               className="w-5 h-5"
@@ -96,10 +94,7 @@ export const ListTeachersView = ({
           </button>
           <button
             className="text-red-400 hover:text-red-300 transition-colors duration-200 cursor-pointer"
-            onClick={() =>
-              (teacher.id || teacher._id) &&
-              requestDelete(String(teacher.id || teacher._id))
-            }
+            onClick={() => teacher.id && requestDelete(String(teacher.id))}
           >
             <svg
               className="w-5 h-5"
