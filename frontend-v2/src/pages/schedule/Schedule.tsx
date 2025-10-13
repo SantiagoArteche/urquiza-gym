@@ -174,7 +174,7 @@ const Schedule: React.FC = () => {
     },
   });
 
-  const [confirmDeleteId, setConfirmDeleteId] = React.useState<
+  const [confirmDeleteId, setConfirmDeleteId] = useState<
     number | string | null
   >(null);
 
