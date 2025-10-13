@@ -2,51 +2,82 @@
 
 ## 1. Funcionales
 
-1. Gestión de alumnos (CRUD):
-   - Crear, listar (con búsqueda), editar y eliminar alumnos.
-   - Búsqueda por nombre, apellido o DNI.
-   - Validar unicidad de DNI al crear (409).
-   - Campos y validaciones:
-     - Nombre (obligatorio, texto 1-100)
-     - Apellido (obligatorio, texto 1-100)
-     - DNI (obligatorio, único, alfanumérico 1-30)
-     - Teléfono (obligatorio, 3-30)
-     - Tel. Emergencia (opcional, 3-30)
-     - Vencimiento (opcional, fecha válida o vacío)
-     - Tipo de cuota (opcional, catálogo libre)
-2. Gestión de profesores (CRUD):
-   - Crear, listar, editar y eliminar.
-   - Asignar clases que dicta cada profesor.
-   - Validar unicidad de DNI al crear (409).
-   - Campos y validaciones:
-     - Nombre, Apellido, DNI, Teléfono, Tel. Emergencia (todos obligatorios salvo aclaración)
-     - Clases asignadas: lista con al menos 1 opción seleccionada
-3. Gestión de horario:
-   - Crear/editar/eliminar entradas con día (lunes-viernes), hora (HH:mm), tipo de clase y profesor.
-   - Reemplazar entrada cuando se crea un (día,hora) ya existente o retornar 409 al actualizar si colisiona.
-   - Campos y validaciones:
-     - Día: uno de {monday..friday}
-     - Hora: formato HH:mm 24hs
-     - Tipo de clase: uno de {camilla, telas, clases grupales, sala, pilates, mixta}
-     - Profesor: id válido o null
-   - Al guardar:
-     - Crear: si existe (día,hora) se reemplaza esa entrada
-     - Editar: si colisiona con otro id diferente → error
-4. Inscripción de alumnos a clases:
-   - Permitir inscribirse a una clase por día.
-   - Limitar cupo por clase (10 participantes).
-   - Permitir desinscribirse voluntariamente.
-   - Errores esperados: "Already joined", "Already joined another class for this day", "Class is full", "Not joined".
-5. Integración frontend-backend:
+1. Crear alumno
 
-   - Frontend consume la API y muestra estados, errores de negocio y confirmaciones.
-   - Campos de identificación expuestos como `id` (string) en todas las respuestas.
-   - No exponer `_id` en UI.
+   - Debe permitir registrar un alumno con campos: Nombre (1-100), Apellido (1-100), DNI (1-30, único), Teléfono (3-30). Opcionales: Tel. Emergencia (3-30), Vencimiento (fecha válida o vacío), Tipo de cuota (libre).
+   - Al guardar, si el DNI ya existe debe retornar conflicto (409) y no crear.
 
-6. Experiencia de usuario (UX):
-   - Confirmaciones para eliminar.
-   - Mensajes claros de error/éxito en alta/edición/inscripción.
-   - Indicadores de carga en listas y horario.
+2. Listar y buscar alumnos
+
+   - Debe mostrar un listado de alumnos.
+   - Debe permitir buscar por nombre, apellido o DNI y filtrar los resultados.
+
+3. Editar alumno
+
+   - Debe permitir modificar los campos del alumno respetando las validaciones de formato y longitudes.
+
+4. Eliminar alumno
+
+   - Debe permitir eliminar un alumno previa confirmación.
+
+5. Crear profesor
+
+   - Debe permitir registrar un profesor con campos: Nombre, Apellido, DNI (único), Teléfono, Tel. Emergencia (todos obligatorios salvo aclaración) y Clases asignadas (al menos una opción).
+   - Si el DNI ya existe debe retornar conflicto (409).
+
+6. Listar y buscar profesores
+
+   - Debe mostrar listado de profesores.
+   - Debe permitir buscar por nombre, apellido o DNI y filtrar los resultados.
+
+7. Editar profesor
+
+   - Debe permitir modificar datos del profesor y la lista de clases asignadas (mínimo 1).
+
+8. Eliminar profesor
+
+   - Debe permitir eliminar un profesor previa confirmación.
+
+9. Crear turno de clase (horario)
+
+   - Debe permitir crear una entrada con: Día {monday..friday}, Hora (HH:mm), Tipo de clase {camilla, telas, clases grupales, sala, pilates, mixta}, Profesor (id válido o null).
+   - Si al crear existe ya un (día, hora), el sistema puede reemplazar esa entrada existente.
+
+10. Editar turno de clase (horario)
+
+- Debe permitir modificar una entrada existente.
+- Si al actualizar colisiona con otra entrada distinta (mismo día y hora, distinto id) debe retornar error (409).
+
+11. Eliminar turno de clase (horario)
+
+- Debe permitir eliminar una entrada del horario previa confirmación.
+
+12. Listar horario
+
+- Debe retornar la grilla de clases con sus campos (id, día, hora, tipo, profesor, participantes).
+
+13. Inscribir alumno a una clase
+
+- Debe permitir anotar un alumno (por DNI) en una clase si:
+  - No superó el cupo máximo (10 participantes).
+  - No está ya anotado en otra clase del mismo día.
+- Errores esperados: "Already joined", "Already joined another class for this day", "Class is full".
+
+14. Desinscribir alumno de una clase
+
+- Debe permitir quitar al alumno de una clase en la que está inscripto.
+- Error esperado si no estaba inscripto: "Not joined".
+
+15. Integración frontend-backend
+
+- El frontend consume la API y muestra estados, errores de negocio y confirmaciones.
+- Las respuestas exponen `id` (string) como identificador. No se debe exponer `_id` en la UI.
+
+16. Experiencia de usuario (UX)
+
+- Confirmaciones para eliminar.
+- Mensajes claros de error/éxito en alta/edición/inscripción.
+- Indicadores de carga en listas y horario.
 
 ## 2. No Funcionales
 
@@ -70,17 +101,3 @@
 7. Observabilidad
    - Log de errores en servidor con detalles mínimos para diagnóstico.
    - Mensajes de cliente sin exponer trazas técnicas.
-
-## 3. Restricciones
-
-- Días hábiles: lunes a viernes.
-- Hora en formato 24h HH:mm.
-- Cupo máximo por clase: 10.
-- Identificación de alumnos por DNI único.
-- Identificador expuesto en API/UI como `id` (string) persistido.
-
-## 4. Supuestos
-
-- El alumno conoce su DNI y no requiere autenticación con contraseña.
-- Los administradores usan el frontend para todas las gestiones.
-- Los profesores no interactúan directamente con el sistema (rol informativo).
