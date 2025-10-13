@@ -38,10 +38,14 @@ export default function EditUser() {
           if (response.ok) {
             navigate("/list-users");
           } else {
-            setError(result.message || "Error desconocido");
+            if (result.message === "Unique key already exists") {
+              setError(`Ya existe un usuario con el DNI ${values.countryId}`);
+            } else {
+              setError("Error desconocido al actualizar el usuario");
+            }
           }
         } catch {
-          setError("Error al actualizar el usuario");
+          setError("Error desconocido al actualizar el usuario");
         } finally {
           setLoading(false);
         }

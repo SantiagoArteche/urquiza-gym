@@ -28,7 +28,7 @@ export class UserService {
   }
 
   updateUserById(id: number | string, data: object) {
-    return this.repository.updateById(id, data, "users");
+    return this.repository.updateById(id, data, "users", "countryId");
   }
 
   deleteUser(id: number | string) {

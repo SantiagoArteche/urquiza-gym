@@ -53,7 +53,7 @@ export default function EditUserView({
               htmlFor="countryId"
               className="block text-sm font-medium mb-1 text-gray-200"
             >
-              País
+              DNI
             </label>
             <input
               name="countryId"

@@ -29,7 +29,7 @@ export default function CreateUser() {
     },
     onSubmit: async (formValues, { resetForm }) => {
       try {
-        await fetch("http://localhost:7000/api/users", {
+        const response = await fetch("http://localhost:7000/api/users", {
           headers: {
             "Content-Type": "application/json",
           },
@@ -37,8 +37,23 @@ export default function CreateUser() {
           body: JSON.stringify(formValues),
         });
 
-        setSubmittedData(formValues);
-        setShowSuccess(true);
+        if (!response.ok) {
+          const errorData = await response.json();
+          if (errorData.error === "Unique key already exists") {
+            setErrorMessage(
+              `El usuario con DNI ${errorData.uniqueKey} ya existe.`
+            );
+            setShowError(true);
+            setTimeout(() => setShowError(false), 5000);
+            return;
+          } else {
+            throw new Error("Error creating user");
+          }
+        } else {
+          setSubmittedData(formValues);
+          setShowSuccess(true);
+        }
+
         resetForm();
       } catch {
         setErrorMessage("Error al crear el alumno. Intente nuevamente.");

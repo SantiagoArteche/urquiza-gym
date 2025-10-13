@@ -17,7 +17,7 @@ const validationSchema = Yup.object({
   lastName: Yup.string().required("Apellido requerido"),
   phone: Yup.string().required("Teléfono requerido"),
   countryId: Yup.string().required("DNI requerido"),
-  emergencyPhone: Yup.string().required("Tel. emergencia requerido"),
+  emergencyPhone: Yup.string(),
   assignedClasses: Yup.array().min(1, "Seleccione al menos una clase"),
 });
 

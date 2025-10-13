@@ -16,7 +16,12 @@ export interface IRepository {
   getByCountryId: (countryId: string, entityKey?: entity) => any;
   deleteById: (id: number | string, entityKey?: entity) => any;
   create: (data: any, entityKey?: entity, uniqueKey?: string) => any;
-  updateById: (id: number | string, data: object, entityKey?: entity) => any;
+  updateById: (
+    id: number | string,
+    data: object,
+    entityKey?: entity,
+    uniqueKey?: string
+  ) => any;
 }
 
 export const repository =

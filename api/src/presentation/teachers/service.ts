@@ -26,7 +26,7 @@ export class TeacherService {
   }
 
   updateTeacherById(id: number | string, data: object) {
-    return this.repository.updateById(id, data, "teachers");
+    return this.repository.updateById(id, data, "teachers", "countryId");
   }
 
   deleteTeacher(id: number | string) {

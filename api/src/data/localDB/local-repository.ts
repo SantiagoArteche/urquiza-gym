@@ -141,7 +141,12 @@ export class LocalRepository implements IRepository {
     return [null, true];
   }
 
-  updateById(id: number | string, data: object, entityKey?: EntityKey) {
+  updateById(
+    id: number | string,
+    data: object,
+    entityKey?: EntityKey,
+    uniqueKey?: string
+  ) {
     if (!entityKey) return ["Missing key"];
 
     const file = this.#getFile();
@@ -155,6 +160,24 @@ export class LocalRepository implements IRepository {
     const foundEntity = entities.find((entity: any) => entity.id === targetId);
 
     if (!foundEntity) return [{ message: "Entity not found", code: 404 }];
+
+    if (uniqueKey) {
+      const hasRepeatedCountryId = entities.find(
+        (entity: any) =>
+          entity[uniqueKey] === data[uniqueKey as keyof typeof data] &&
+          entity.id !== targetId
+      );
+
+      if (hasRepeatedCountryId) {
+        return [
+          {
+            message: "Unique key already exists",
+            uniqueKey: data[uniqueKey as keyof typeof data],
+            code: 409,
+          },
+        ];
+      }
+    }
 
     file[entityKey] = this.#updateEntity(file, entityKey, data, targetId);
 

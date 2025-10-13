@@ -131,7 +131,12 @@ export class MongoRepository implements IRepository {
     return [null, { ...rest, id: idValue }];
   }
 
-  async updateById(id: number | string, data: object, entityKey?: EntityKey) {
+  async updateById(
+    id: number | string,
+    data: object,
+    entityKey?: EntityKey,
+    uniqueKey?: string
+  ) {
     if (!entityKey) return [{ message: "Missing key", code: 400 }];
     const Model: any = this.#modelFor(entityKey);
     if (typeof id !== "string" || !isValidObjectId(id)) {
@@ -141,8 +146,29 @@ export class MongoRepository implements IRepository {
     const found = await Model.findOne(filter).select({ _id: 1 }).lean();
     if (!found) return [{ message: "Entity not found", code: 404 }];
     const toUpdate: Record<string, any> = { ...(data as any) };
+
+    if (uniqueKey) {
+      const foundModels = await Model.find({ [uniqueKey]: toUpdate[uniqueKey] })
+        .select({ _id: 1 })
+        .lean();
+
+      const hasRepeatedCountryId =
+        foundModels.find((model: any) => model._id.toString() !== id) != null;
+
+      if (hasRepeatedCountryId) {
+        return [
+          {
+            message: "Unique key already exists",
+            uniqueKey: toUpdate[uniqueKey],
+            code: 409,
+          },
+        ];
+      }
+    }
+
     delete toUpdate._id;
     delete toUpdate.id;
+
     await Model.updateOne(filter, { $set: toUpdate });
     const updated = await Model.findOne(filter).lean();
     if (!updated) return [null, updated];
