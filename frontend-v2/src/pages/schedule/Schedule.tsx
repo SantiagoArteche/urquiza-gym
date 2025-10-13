@@ -174,12 +174,32 @@ const Schedule: React.FC = () => {
     },
   });
 
+  const [confirmDeleteId, setConfirmDeleteId] = React.useState<
+    number | string | null
+  >(null);
+
+  const openConfirm = (id: number | string) => setConfirmDeleteId(id);
+
+  const closeConfirm = () => setConfirmDeleteId(null);
+
+  const handleConfirmDelete = async () => {
+    if (confirmDeleteId == null) return;
+    try {
+      await onRemoveEntry(confirmDeleteId);
+    } finally {
+      closeConfirm();
+    }
+  };
+
   return (
     <ScheduleView
       teachers={teachers}
       onSelectSlot={onSelectSlot}
       onEditEntry={onEditEntry}
-      onRemoveEntry={onRemoveEntry}
+      openConfirm={openConfirm}
+      confirmDeleteId={confirmDeleteId}
+      closeConfirm={closeConfirm}
+      handleConfirmDelete={handleConfirmDelete}
       selectedSlot={selectedSlot}
       editingEntry={editingEntry}
       onCancelEdit={onCancelEdit}

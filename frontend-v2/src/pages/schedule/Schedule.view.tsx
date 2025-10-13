@@ -11,7 +11,6 @@ export interface ScheduleViewProps {
   teachers: { id?: number | string; name: string; lastName: string }[];
   onSelectSlot: (day: DayOfWeek, time: string) => void;
   onEditEntry: (id: number | string) => void;
-  onRemoveEntry: (id: number | string) => void | Promise<void>;
   selectedSlot?: { day: DayOfWeek; time: string } | null;
   editingEntry?: ScheduleEntry | null;
   onCancelEdit: () => void;
@@ -22,13 +21,16 @@ export interface ScheduleViewProps {
   handleSubmit: React.FormEventHandler<HTMLFormElement>;
   getFullName: (t: TeacherType | undefined) => string;
   getEntry: (day: DayOfWeek, time: string) => ScheduleEntry | undefined;
+  openConfirm: (id: number | string) => void;
+  closeConfirm: () => void;
+  confirmDeleteId: number | string | null;
+  handleConfirmDelete: () => void | Promise<void>;
 }
 
 const ScheduleView: React.FC<ScheduleViewProps> = ({
   teachers,
   onSelectSlot,
   onEditEntry,
-  onRemoveEntry,
   selectedSlot,
   editingEntry,
   onCancelEdit,
@@ -39,6 +41,10 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({
   handleSubmit,
   getFullName,
   getEntry,
+  openConfirm,
+  closeConfirm,
+  confirmDeleteId,
+  handleConfirmDelete,
 }) => {
   return (
     <div className="p-4 mx-auto min-h-screen bg-gray-950">
@@ -115,7 +121,7 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({
                               className="bg-red-600 hover:bg-red-700 px-1 rounded cursor-pointer"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                onRemoveEntry(entry.id);
+                                openConfirm(entry.id);
                               }}
                             >
                               X
@@ -242,7 +248,7 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({
                   {editingEntry && (
                     <button
                       type="button"
-                      onClick={() => onRemoveEntry(editingEntry.id)}
+                      onClick={() => openConfirm(editingEntry.id)}
                       className="px-3 py-1 bg-red-600 hover:bg-red-700 rounded text-sm"
                     >
                       Eliminar
@@ -258,6 +264,48 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({
                 </div>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {confirmDeleteId !== null && (
+        <div
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-[60]"
+          aria-modal="true"
+        >
+          <button
+            type="button"
+            aria-label="Cerrar confirmación"
+            className="absolute inset-0 w-full h-full cursor-default"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) closeConfirm();
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") closeConfirm();
+            }}
+          />
+          <div className="bg-gray-900 p-6 rounded-lg shadow-xl w-full max-w-sm space-y-4 border border-gray-700 relative text-white">
+            <h3 className="text-lg font-semibold">Confirmar eliminación</h3>
+            <p className="text-sm text-gray-300">
+              ¿Estás seguro de que querés eliminar esta clase? Esta acción no se
+              puede deshacer.
+            </p>
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                type="button"
+                onClick={closeConfirm}
+                className="px-3 py-1 bg-gray-700 hover:bg-gray-600 rounded text-sm"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                className="px-3 py-1 bg-red-600 hover:bg-red-700 rounded text-sm"
+              >
+                Eliminar
+              </button>
+            </div>
           </div>
         </div>
       )}
